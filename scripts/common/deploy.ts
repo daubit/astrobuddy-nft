@@ -6,19 +6,7 @@
 // Runtime Environment's members available in the global scope.
 import hardhat, { ethers } from "hardhat";
 import { AddrStorage, Storage } from "../util/storage";
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const NETWORK_NAME: { [chainId: number]: string } = {
-  80001: "mumbai",
-  137: "polygon",
-  1337: "development",
-};
-
-const networkName = (chainId: number) =>
-  NETWORK_NAME[chainId]
-    ? NETWORK_NAME[chainId]
-    : new Error("Cannot find chain name");
+import { sleep, verify } from "../util/utils";
 
 async function main() {
   const network = await ethers.provider.getNetwork();
@@ -38,11 +26,7 @@ async function main() {
 
     console.log("Waiting for verification...");
     await sleep(60 * 1000);
-    hardhat.run("verify", {
-      address: lock.address,
-      network: networkName(chainId),
-      constructorArgsParams: [],
-    });
+    await verify(hardhat, lock.address, chainId);
   }
   storage.save(network.chainId, addresses);
 }
