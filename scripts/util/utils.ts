@@ -17,13 +17,14 @@ export const networkName = (chainId: number) =>
 export const verify = async (
   hardhat: HardhatRuntimeEnvironment,
   adddress: string,
-  chainId: number
+  chainId: number,
+  params?: unknown[]
 ) => {
   if ([80001, 137, 1337].includes(chainId)) {
     hardhat.run("verify", {
       address: adddress,
       network: networkName(chainId),
-      constructorArgsParams: [],
+      constructorArgsParams: params ?? [],
     });
   } else {
     console.log(`Cannot verify for ChainId ${chainId}`);
