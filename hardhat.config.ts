@@ -11,6 +11,7 @@ import "solidity-coverage";
 import "hardhat-ethernal";
 import "hardhat-contract-sizer";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
+import "@nomiclabs/hardhat-solpp";
 
 dotenv.config();
 
@@ -75,6 +76,9 @@ const config: HardhatUserConfig = {
     disabled: true,
   },
   ethernalAstUpload: true,
+  solpp: {
+    defs: { OPENSEA_POLYGON: process.env.OPENSEA_POLYGON },
+  },
 };
 export default config;
 
