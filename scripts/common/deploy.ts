@@ -6,7 +6,7 @@
 // Runtime Environment's members available in the global scope.
 import hardhat, { ethers } from "hardhat";
 import { AddrStorage, Storage } from "../util/storage";
-import { sleep, verify } from "../util/utils";
+import { verify } from "../util/utils";
 
 async function main() {
   const network = await ethers.provider.getNetwork();
@@ -25,7 +25,6 @@ async function main() {
     console.log("Lock deployed to:", lock.address);
 
     console.log("Waiting for verification...");
-    await sleep(60 * 1000);
     await verify(hardhat, lock.address, chainId);
   }
   storage.save(network.chainId, addresses);

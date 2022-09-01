@@ -21,6 +21,7 @@ export const verify = async (
   params?: unknown[]
 ) => {
   if ([80001, 137, 1337].includes(chainId)) {
+    await sleep(60 * 1000);
     hardhat.run("verify", {
       address: adddress,
       network: networkName(chainId),
