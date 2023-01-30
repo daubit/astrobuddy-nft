@@ -1,0 +1,33 @@
+<script type="text/javascript">
+  const leftEye = document.getElementById("Auge_L");
+  const rightEye = document.getElementById("Auge_R");
+  const lEyeRect = leftEye.getBoundingClientRect();
+  const rEyeRect = rightEye.getBoundingClientRect();
+  const lEyeX = lEyeRect.left + lEyeRect.width / 2;
+  const lEyeY = rEyeRect.top + rEyeRect.height / 2;
+  const rEyeX = rEyeRect.left + rEyeRect.width / 2;
+  const rEyeY = rEyeRect.top + rEyeRect.height / 2;
+  document
+    .getElementsByTagName("svg")[0]
+    .addEventListener("mousemove", function (event) {
+      const { clientX, clientY } = event;
+      // left eye
+      const dXLeft = lEyeX - clientX;
+      const dYLeft = lEyeY - clientY;
+      const unitLeft = Math.sqrt(Math.pow(dXLeft, 2) + Math.pow(dYLeft, 2));
+      const normXLeft = dXLeft / unitLeft;
+      const normYLeft = dYLeft / unitLeft;
+      // right eye
+      const dXRight = rEyeX - clientX;
+      const dYRight = rEyeY - clientY;
+      const unitRight = Math.sqrt(Math.pow(dXRight, 2) + Math.pow(dYRight, 2));
+      const normXRight = dXRight / unitRight;
+      const normYRight = dYRight / unitRight;
+      leftEye.style = `transform: translate(${normXLeft * -20}px, ${
+        normYLeft * -20
+      }px)`;
+      rightEye.style = `transform: translate(${normXRight * -20}px, ${
+        normYRight * -20
+      }px)`;
+    });
+</script>
