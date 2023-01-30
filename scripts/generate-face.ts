@@ -17,7 +17,8 @@ const template = (primaryColor: string, lightColor: string) => {
 
 
 for (let k = 0; k < amount; k++) {
-    const newColor = randomColor();
-    const newLightColor = randomColor({ hue: newColor, luminosity: "bright" })
-    appendFileSync(`${ROOT_FOLDER}/style_${k}.html`, template(newColor, newLightColor))
+    const random = randomColor();
+    const newLightColor = randomColor({ hue: random, luminosity: "bright" })
+    const newDarkColor = randomColor({ hue: random, luminosity: "dark" })
+    appendFileSync(`${ROOT_FOLDER}/style_${k}.html`, template(newDarkColor, newLightColor))
 }
