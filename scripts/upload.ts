@@ -138,7 +138,7 @@ export async function uploadVariants(metadata: MetadataFactory, ROOT_FOLDER: Pat
 					// console.log(`Added attribute ${attributeId}, ${attributeFolders[i]} chunk ${start}`);
 				}
 			}
-			console.log(`Added attribute ${attributeFolders[i]}`);
+			// console.log(`Added attribute ${attributeFolders[i]}`);
 		}
 	}
 }
