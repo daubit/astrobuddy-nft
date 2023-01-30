@@ -32,6 +32,22 @@
         stroke: #000;
         stroke-width: 7px;
       }
+      #Augenlied_L_unten,
+      #Augenlied_R_unten,
+      #Augenlied_L_oben,
+      #Augenlied_R_oben {
+        transition: all 50ms ease-in-out;
+      }
+      #Auge_L:active > #Augenlied_L > #Augenlied_L_unten,
+      #Auge_R:active > #Augenlied_R > #Augenlied_R_unten {
+        transform: translate(0px);
+      }
+      #Auge_L:active > #Augenlied_L > #Augenlied_L_oben > #Augenlied_L_oben1,
+      #Auge_R:active > #Augenlied_R > #Augenlied_R_oben > #Augenlied_R_oben1,
+      #Auge_L:active > #Augenlied_L > #Augenlied_L_oben > #Augenlied_L_oben2,
+      #Auge_R:active > #Augenlied_R > #Augenlied_R_oben > #Augenlied_R_oben2 {
+        transform: translate(0px);
+      }
     </style>
     <radialGradient
       id="cls-4"
@@ -71,83 +87,94 @@
       height="305.42"
     ></rect>
     <g id="Auge_L">
-      <ellipse
-        id="Pupille02"
-        class="cls-7"
-        cx="590.24"
-        cy="506"
-        rx="55.64"
-        ry="87.58"
-      ></ellipse>
-      <ellipse
-        id="Sepcular01"
-        class="cls-2"
-        cx="618.97"
-        cy="449.15"
-        rx="9.88"
-        ry="16.14"
-        transform="translate(-145.54 429.78) rotate(-34.51)"
-      ></ellipse>
+      <g id="Pupille_L">
+        <ellipse
+          id="Pupille02"
+          class="cls-7"
+          cx="590.24"
+          cy="506"
+          rx="55.64"
+          ry="87.58"
+        ></ellipse>
+        <ellipse
+          id="Sepcular01"
+          class="cls-2"
+          cx="618.97"
+          cy="449.15"
+          rx="9.88"
+          ry="16.14"
+          transform="translate(-145.54 429.78) rotate(-34.51)"
+        ></ellipse>
+      </g>
+      <g id="Augenlied_L">
+        <polygon
+          id="Augenlied_L_unten"
+          class="cls-11"
+          points="683.38 504.81 496.25 504.81 496.25 643.61 603.97 643.61 683.38 601.64 683.38 504.81"
+        ></polygon>
+        <g id="Augenlied_L_oben">
+          <rect
+            id="Augenlied_L_oben1"
+            class="cls-12"
+            x="496.25"
+            y="434.87"
+            width="187.13"
+            height="69.4"
+            style="stroke: black"
+          ></rect>
+          <rect
+            id="Augenlied_L_oben2"
+            class="cls-12"
+            x="496.25"
+            y="367.78"
+            width="187.13"
+            height="69.4"
+          ></rect>
+        </g>
+      </g>
     </g>
     <g id="Auge_R">
-      <ellipse
-        id="Pupille01"
-        class="cls-7"
-        cx="409.76"
-        cy="503.61"
-        rx="55.64"
-        ry="87.58"
-      ></ellipse>
-      <ellipse
-        id="Sepcular02"
-        class="cls-2"
-        cx="436.95"
-        cy="448.09"
-        rx="9.88"
-        ry="16.14"
-        transform="translate(-176.98 326.45) rotate(-34.51)"
-      ></ellipse>
-    </g>
-    <g id="Augenlied_L">
-      <polygon
-        id="Augenlied_L_unten"
-        class="cls-11"
-        points="683.38 504.81 496.25 504.81 496.25 643.61 603.97 643.61 683.38 601.64 683.38 504.81"
-      ></polygon>
-      <g id="Augenlied_L_oben">
-        <rect
-          class="cls-12"
-          x="496.25"
-          y="434.87"
-          width="187.13"
-          height="69.4"
-        ></rect>
-        <rect
-          class="cls-12"
-          x="496.25"
-          y="367.78"
-          width="187.13"
-          height="69.4"
-        ></rect>
+      <g id="Pupille_R">
+        <ellipse
+          id="Pupille01"
+          class="cls-7"
+          cx="409.76"
+          cy="503.61"
+          rx="55.64"
+          ry="87.58"
+        ></ellipse>
+        <ellipse
+          id="Sepcular02"
+          class="cls-2"
+          cx="436.95"
+          cy="448.09"
+          rx="9.88"
+          ry="16.14"
+          transform="translate(-176.98 326.45) rotate(-34.51)"
+        ></ellipse>
+      </g>
+      <g id="Augenlied_R">
+        <polygon
+          id="Augenlied_R_unten"
+          class="cls-11"
+          points="502.91 504.81 315.78 504.81 315.78 600.74 394.68 643.61 502.91 643.61 502.91 504.81"
+        ></polygon>
+        <g id="Augenlied_R_oben">
+          <polygon
+            id="Augenlied_R_oben1"
+            class="cls-12"
+            style="stroke: black"
+            points="502.91 434.87 409.34 434.87 315.78 434.87 315.78 504.28 502.91 504.28 502.91 434.87"
+          ></polygon>
+          <polygon
+            id="Augenlied_R_oben2"
+            class="cls-12"
+            points="502.91 367.78 409.34 367.78 315.78 367.78 315.78 437.18 502.91 437.18 502.91 367.78"
+          ></polygon>
+        </g>
       </g>
     </g>
-    <g id="Augenlied_R">
-      <polygon
-        id="Augenlied_R_unten"
-        class="cls-11"
-        points="502.91 504.81 315.78 504.81 315.78 600.74 394.68 643.61 502.91 643.61 502.91 504.81"
-      ></polygon>
-      <g id="Augenlied_R_oben">
-        <polygon
-          class="cls-12"
-          points="502.91 434.87 409.34 434.87 315.78 434.87 315.78 504.28 502.91 504.28 502.91 434.87"
-        ></polygon>
-        <polygon
-          class="cls-12"
-          points="502.91 367.78 409.34 367.78 315.78 367.78 315.78 437.18 502.91 437.18 502.91 367.78"
-        ></polygon>
-      </g>
-    </g>
+
     <path
       id="Kopf"
       class="cls-4"
