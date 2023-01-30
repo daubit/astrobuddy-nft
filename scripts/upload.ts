@@ -3,7 +3,7 @@ import { PathLike, readdirSync, readFileSync } from "fs";
 import { minify } from "html-minifier";
 import { encode } from "js-base64";
 // @ts-ignore
-import { MetadataFactory } from "../../typechain-types";
+import { MetadataFactory } from "../typechain-types";
 
 export interface Variant {
 	name: string;
@@ -150,6 +150,6 @@ export default async function uploadAll(metadata: MetadataFactory, ROOT_FOLDER: 
 	await uploadAttributes(metadata, ROOT_FOLDER);
 	await uploadVariants(metadata, ROOT_FOLDER, options);
 	// 5 ist die Id für das Monster_1 Attribut
-	await uploadStyles(metadata, "assets/styles", 5);
+	// await uploadStyles(metadata, "assets/Layer_2/_styles", 5);
 	await uploadDescription(metadata, "Monster AG");
 }

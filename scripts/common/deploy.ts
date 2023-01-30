@@ -9,15 +9,15 @@ import hardhat from "hardhat";
 import { AddressStorage, Storage } from "../util/storage";
 import { verify } from "../util/utils";
 import { REGISTRY_ADDRESS, CONTRACT_METADATA_CID } from "../util/const.json";
-import { Blyatversity } from "../../typechain-types";
+import { Astrobuddy } from "../../typechain-types";
 
 async function main() {
 	const network = await ethers.provider.getNetwork();
 	const storage = new Storage("addresses.json");
 	const addresses: AddressStorage = storage.fetch(network.chainId);
-	const { blyat: blyatAddress, stringLib: stringLibAddress, metadata: metadataAddress } = addresses;
+	const { astro: astroAddress, stringLib: stringLibAddress, metadata: metadataAddress } = addresses;
 	// We get the contract to deploy
-	let blyatversity: Blyatversity;
+	let Astrobuddy: Astrobuddy;
 	if (!stringLibAddress) {
 		const StringLib = await ethers.getContractFactory("String");
 		const stringLib = await StringLib.deploy();
@@ -26,20 +26,20 @@ async function main() {
 		console.log("Library deployed!");
 	}
 	if (!addresses.stringLib) throw new Error("Cannot find String Library!");
-	if (!blyatAddress) {
-		const Blyatversity = await ethers.getContractFactory("Blyatversity");
-		blyatversity = (await upgrades.deployProxy(Blyatversity, [
+	if (!astroAddress) {
+		const Astrobuddy = await ethers.getContractFactory("Astrobuddy");
+		astro = (await upgrades.deployProxy(Astrobuddy, [
 			CONTRACT_METADATA_CID,
 			REGISTRY_ADDRESS,
-		])) as Blyatversity;
-		await blyatversity.deployed();
-		addresses.blyat = blyatversity.address;
-		console.log("Blyatversity deployed to:", blyatversity.address);
+		])) as Astrobuddy;
+		await astro.deployed();
+		addresses.astro = astro.address;
+		console.log("Astrobuddy deployed to:", astro.address);
 		console.log("Waiting for verification...");
-		await verify(hardhat, blyatversity.address, network.chainId, [CONTRACT_METADATA_CID, REGISTRY_ADDRESS]);
+		await verify(hardhat, astro.address, network.chainId, [CONTRACT_METADATA_CID, REGISTRY_ADDRESS]);
 	} else {
-		const Blyatversity = await ethers.getContractFactory("Blyatversity");
-		blyatversity = Blyatversity.attach(blyatAddress) as Blyatversity;
+		const Astrobuddy = await ethers.getContractFactory("Astrobuddy");
+		astro = Astrobuddy.attach(astroAddress) as Astrobuddy;
 	}
 	if (!metadataAddress) {
 		const Metadata = await ethers.getContractFactory("MetadataFactory", {
@@ -49,7 +49,7 @@ async function main() {
 		await metadata.deployed();
 		addresses.metadata = metadata.address;
 		console.log("Metadata deployed!");
-		const addTx = await blyatversity["addItem(address)"](metadata.address);
+		const addTx = await astro["addItem(address)"](metadata.address);
 		await addTx.wait();
 		console.log("Metadata added!");
 		await verify(hardhat, metadata.address, network.chainId, []);

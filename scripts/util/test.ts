@@ -11,12 +11,12 @@ interface TokenArgs {
 export async function benchmarkTokenURI(args: TokenArgs, hre: HardhatRuntimeEnvironment) {
 	const network = await hre.ethers.provider.getNetwork();
 	const storage = new Storage("addresses.json");
-	const { blyat: blyatAddress, stringLib: stringLibAddress } = storage.fetch(network.chainId);
+	const { astro: astroAddress, stringLib: stringLibAddress } = storage.fetch(network.chainId);
 	const { id: tokenId, amount } = args;
 	const Metadata = await hre.ethers.getContractFactory("MetadataFactory", {
 		libraries: { String: stringLibAddress },
 	});
-	const metadata = Metadata.attach(blyatAddress) as MetadataFactory;
+	const metadata = Metadata.attach(astroAddress) as MetadataFactory;
 	const benchMarks = [];
 	for (let i = 0; i < amount; i++) {
 		const start = Date.now();

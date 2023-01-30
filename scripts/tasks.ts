@@ -7,11 +7,11 @@
 import { Storage } from "./util/storage";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 // @ts-ignore
-import { Blyatversity, MetadataFactory } from "../typechain-types";
+import { Astrobuddy, MetadataFactory } from "../typechain-types";
 import { readdirSync, writeFileSync } from "fs";
 import { BigNumber } from "ethers";
-import { uploadAttributes, uploadStyles, uploadVariants } from "./util/upload-attribs";
-import uploadAllHelper from "../scripts/util/upload-attribs";
+import { uploadAttributes, uploadStyles, uploadVariants } from "./upload";
+import uploadAllHelper from "./upload";
 
 interface MintArgs {
 	to: string;
@@ -132,11 +132,11 @@ export async function uploadStls(args: UploadArgs, hre: HardhatRuntimeEnvironmen
 export async function mint(args: MintArgs, hre: HardhatRuntimeEnvironment) {
 	const network = await hre.ethers.provider.getNetwork();
 	const storage = new Storage("addresses.json");
-	const { blyat: blyatAddress } = storage.fetch(network.chainId);
+	const { astro: astroAddress } = storage.fetch(network.chainId);
 	const { to, seasonid: itemId } = args;
-	const Blyatversity = await hre.ethers.getContractFactory("Blyatversity");
-	const blyat = Blyatversity.attach(blyatAddress) as Blyatversity;
-	const mintTx = await blyat.mint(BigNumber.from(itemId), to);
+	const Astrobuddy = await hre.ethers.getContractFactory("Astrobuddy");
+	const astro = Astrobuddy.attach(astroAddress) as Astrobuddy;
+	const mintTx = await astro.mint(BigNumber.from(itemId), to);
 	await mintTx.wait();
 	console.log(`https://${network.chainId === 80001 ? "mumbai." : ""}polygonscan.com/tx/${mintTx.hash}`);
 }
@@ -144,12 +144,12 @@ export async function mint(args: MintArgs, hre: HardhatRuntimeEnvironment) {
 export async function tokenURI(args: TokenArgs, hre: HardhatRuntimeEnvironment) {
 	const network = await hre.ethers.provider.getNetwork();
 	const storage = new Storage("addresses.json");
-	const { blyat: blyatAddress, stringLib: stringLibAddress } = storage.fetch(network.chainId);
+	const { astro: astroAddress, stringLib: stringLibAddress } = storage.fetch(network.chainId);
 	const { id: tokenId } = args;
 	const Metadata = await hre.ethers.getContractFactory("MetadataFactory", {
 		libraries: { String: stringLibAddress },
 	});
-	const metadata = Metadata.attach(blyatAddress) as MetadataFactory;
+	const metadata = Metadata.attach(astroAddress) as MetadataFactory;
 	// const tokenURI = await metadata.tokenURI(tokenId);
 	// writeFileSync("token.txt", tokenURI, "utf-8");
 	const tx = await metadata.getAttribute(tokenId);

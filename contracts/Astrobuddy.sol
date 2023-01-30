@@ -17,7 +17,7 @@ import "hardhat/console.sol";
  *       Opensea: 10%
  *
  * */
-contract Blyatversity is
+contract Astrobuddy is
     Initializable,
     ERC721AUpgradeable,
     AccessControlUpgradeable,
@@ -74,7 +74,7 @@ contract Blyatversity is
         initializer
         initializerERC721A
     {
-        __ERC721A_init("Blyatversity", "Blyat");
+        __ERC721A_init("Astrobuddy", "Blyat");
         _contractCID = contractCID_;
         _proxyRegistryAddress = proxyRegistryAddress;
 

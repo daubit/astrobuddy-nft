@@ -41,18 +41,18 @@ export async function airdrop(
     throw new Error("Folder does not exists");
   }
 
-  const { blyat: blyatAddress } = storage.fetch(chainId);
-  if (!blyatAddress) throw new Error("Need an address!");
-  const Blyat = await hre.ethers.getContractFactory("Blyatversity");
-  const blyat = Blyat.attach(blyatAddress);
+  const { astro: astroAddress } = storage.fetch(chainId);
+  if (!astroAddress) throw new Error("Need an address!");
+  const Blyat = await hre.ethers.getContractFactory("Astrobuddy");
+  const astro = Blyat.attach(astroAddress);
 
-  const totalSupply = (await blyat.totalSupply()).toNumber();
+  const totalSupply = (await astro.totalSupply()).toNumber();
   const quantity = Object.values(airdrop).reduce((a, b) => a + b, 0);
   if (amountFilesOnIPFS < totalSupply + quantity)
     throw new Error("IPFS does not contain enough files for minting!");
   for (const address in airdrop) {
     const quantity = airdrop[address];
-    const mint = await blyat.mint(address, quantity);
+    const mint = await astro.mint(address, quantity);
     console.log(
       `Attempting to mint ${quantity} NFT${
         quantity > 1 ? "s" : ""
