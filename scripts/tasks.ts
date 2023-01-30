@@ -36,7 +36,7 @@ export async function addAttributes(args: any, hre: HardhatRuntimeEnvironment) {
 		libraries: { String: stringLibAddress },
 	});
 	const metadata = Metadata.attach(metadataAddress) as MetadataFactory;
-	const ROOT_FOLDER = "assets/layers";
+	const ROOT_FOLDER = "assets";
 	await uploadAttributes(metadata, ROOT_FOLDER);
 }
 
@@ -48,7 +48,7 @@ export async function setDescription(args: any, hre: HardhatRuntimeEnvironment) 
 		libraries: { String: stringLibAddress },
 	});
 	const metadata = Metadata.attach(metadataAddress) as MetadataFactory;
-	const setDescriptionTx = await metadata.setDescription("Monster AG");
+	const setDescriptionTx = await metadata.setDescription("Astrobuddy!");
 	await setDescriptionTx.wait();
 	console.log("Set description!");
 }
@@ -99,7 +99,7 @@ export async function uploadAll(args: UploadArgs, hre: HardhatRuntimeEnvironment
 		libraries: { String: stringLibAddress },
 	});
 	const metadata = Metadata.attach(metadataAddress) as MetadataFactory;
-	const ROOT_FOLDER = "assets/layers";
+	const ROOT_FOLDER = "assets";
 	await uploadAllHelper(metadata, ROOT_FOLDER);
 }
 
@@ -112,22 +112,10 @@ export async function upload(args: UploadArgs, hre: HardhatRuntimeEnvironment) {
 	});
 	const { start, end, layer } = args;
 	const metadata = Metadata.attach(metadataAddress) as MetadataFactory;
-	const ROOT_FOLDER = "assets/layers";
+	const ROOT_FOLDER = "assets";
 	await uploadVariants(metadata, ROOT_FOLDER, { start, end, layer });
 }
 
-export async function uploadStls(args: UploadArgs, hre: HardhatRuntimeEnvironment) {
-	const network = await hre.ethers.provider.getNetwork();
-	const storage = new Storage("addresses.json");
-	const { stringLib: stringLibAddress, metadata: metadataAddress } = storage.fetch(network.chainId);
-	const Metadata = await hre.ethers.getContractFactory("MetadataFactory", {
-		libraries: { String: stringLibAddress },
-	});
-	const { start, end, layer } = args;
-	const metadata = Metadata.attach(metadataAddress) as MetadataFactory;
-	const ROOT_FOLDER = "styles";
-	await uploadStyles(metadata, ROOT_FOLDER, 5, { layer, start, end });
-}
 
 export async function mint(args: MintArgs, hre: HardhatRuntimeEnvironment) {
 	const network = await hre.ethers.provider.getNetwork();
@@ -146,12 +134,10 @@ export async function tokenURI(args: TokenArgs, hre: HardhatRuntimeEnvironment) 
 	const storage = new Storage("addresses.json");
 	const { astro: astroAddress, stringLib: stringLibAddress } = storage.fetch(network.chainId);
 	const { id: tokenId } = args;
-	const Metadata = await hre.ethers.getContractFactory("MetadataFactory", {
-		libraries: { String: stringLibAddress },
-	});
-	const metadata = Metadata.attach(astroAddress) as MetadataFactory;
+	const Astrobuddy = await hre.ethers.getContractFactory("Astrobuddy");
+	const astro = Astrobuddy.attach(astroAddress) as Astrobuddy;
 	// const tokenURI = await metadata.tokenURI(tokenId);
 	// writeFileSync("token.txt", tokenURI, "utf-8");
-	const tx = await metadata.getAttribute(tokenId);
+	const tx = await astro.tokenURI(tokenId);
 	console.log(tx);
 }

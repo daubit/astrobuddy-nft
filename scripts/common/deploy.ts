@@ -17,7 +17,7 @@ async function main() {
 	const addresses: AddressStorage = storage.fetch(network.chainId);
 	const { astro: astroAddress, stringLib: stringLibAddress, metadata: metadataAddress } = addresses;
 	// We get the contract to deploy
-	let Astrobuddy: Astrobuddy;
+	let astro: Astrobuddy;
 	if (!stringLibAddress) {
 		const StringLib = await ethers.getContractFactory("String");
 		const stringLib = await StringLib.deploy();

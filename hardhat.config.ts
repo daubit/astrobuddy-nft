@@ -13,7 +13,7 @@ import "hardhat-gas-reporter";
 import "solidity-coverage";
 import "hardhat-contract-sizer";
 import "@openzeppelin/hardhat-upgrades";
-import { addAttributes, mint, reset, setDescription, tokenURI, upload, uploadStls } from "./scripts/tasks";
+import { addAttributes, mint, reset, setDescription, tokenURI, upload, uploadAll } from "./scripts/tasks";
 import { benchmarkTokenURI } from "./scripts/util/test";
 
 task("accounts", "Prints the list of accounts", async (_args, hre: HardhatRuntimeEnvironment) => {
@@ -29,7 +29,7 @@ task("mint", "Mint Blyat Token", mint).addParam("to", "Address to mint to").addP
 task("setDescription", setDescription);
 task("addAttributes", addAttributes);
 task("upload", "Upload variants", upload).addParam("start").addParam("end").addParam("layer");
-task("uploadStyles", uploadStls).addParam("start").addParam("end").addParam("layer");
+task("uploadAll", "Upload variants", uploadAll)
 task("reset", "Reset metadata", reset).addParam("start").addParam("end").addParam("layer");
 task("tokenURI", "Display tokenURI", tokenURI).addParam("id");
 task("benchMark", benchmarkTokenURI).addParam("id").addParam("amount");

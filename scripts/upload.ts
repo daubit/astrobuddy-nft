@@ -4,6 +4,8 @@ import { minify } from "html-minifier";
 import { encode } from "js-base64";
 // @ts-ignore
 import { MetadataFactory } from "../typechain-types";
+import { wrapInCData } from "./util/cdata";
+import { pad, PadType } from "./util/padding";
 
 export interface Variant {
 	name: string;
@@ -31,60 +33,6 @@ export async function uploadDescription(metadata: MetadataFactory, description: 
 	const setDescriptionTx = await metadata.setDescription(description);
 	await setDescriptionTx.wait();
 	//console.log(`Set Description`);
-}
-export async function uploadStyles(
-	metadata: MetadataFactory,
-	rootFolder: PathLike,
-	startId: number,
-	options?: Options
-) {
-	const layerId = options?.layer ?? 0;
-	let attributeId = startId;
-	let attributes = readdirSync(rootFolder);
-	if (layerId > 0) {
-		const chosenLayer = attributes.find((attribute) => attribute.includes(layerId.toString()));
-		attributes = chosenLayer ? [chosenLayer] : attributes;
-	}
-	for (const attribute of attributes) {
-		const variants = readdirSync(`${rootFolder}/${attribute}`).slice(options?.start, options?.end);
-		for (const variant of variants) {
-			// console.log(`Adding attribute ${attribute}`);
-			const stylePath = `${rootFolder}/${attribute}/${variant}`;
-			const styles: string[] = readdirSync(stylePath).map((file) =>
-				minify(readFileSync(`${stylePath}/${file}`, "utf-8"), {
-					collapseWhitespace: true,
-					collapseBooleanAttributes: true,
-					minifyCSS: true,
-					minifyJS: true,
-					removeComments: false,
-					removeEmptyAttributes: true,
-					removeRedundantAttributes: true,
-					sortAttributes: true,
-					sortClassName: true,
-					caseSensitive: true,
-				})
-			);
-			for (const style of styles) {
-				const chunkSize = 30_000;
-				for (let start = 0; start < style.length; start += chunkSize) {
-					console.log(`Adding style for ${attributeId} ${variant}`);
-					const till = start + chunkSize < style.length ? start + chunkSize : style.length;
-					let styleChunk = style.slice(start, till);
-					while (encode(styleChunk, false).endsWith("=")) {
-						styleChunk += " ";
-					}
-					const addStyleChunkedTx = await metadata.addStyleChunked(
-						attributeId,
-						variant,
-						encodeURIComponent(encode(styleChunk, false))
-					);
-					await addStyleChunkedTx.wait();
-					// console.log(`Added attribute ${attributeId}, ${attribute} chunk ${start}`);
-				}
-			}
-		}
-		attributeId++;
-	}
 }
 
 export async function uploadVariants(metadata: MetadataFactory, ROOT_FOLDER: PathLike, options?: Options) {
@@ -120,15 +68,18 @@ export async function uploadVariants(metadata: MetadataFactory, ROOT_FOLDER: Pat
 					caseSensitive: true,
 				}),
 			}));
+			const padType = attribute.includes("_scripts") ? PadType.Script : PadType.Svg;
+
 			for (const variant of variants) {
-				const { svg, name } = variant;
-				const chunkSize = 5_000;
+				let { svg, name } = variant;
+				if (attribute === "_scripts") {
+					console.log("wrap in cdata");
+					svg = wrapInCData(svg);
+				}
+				const chunkSize = 10_000;
 				for (let start = 0; start < svg.length; start += chunkSize) {
 					const till = start + chunkSize < svg.length ? start + chunkSize : svg.length;
-					let svgChunk = svg.slice(start, till);
-					while (encode(svgChunk, false).endsWith("=")) {
-						svgChunk += " ";
-					}
+					const svgChunk = pad(svg.slice(start, till), padType);
 					const addVariantChunkedTx = await metadata.addVariantChunked(
 						attributeId,
 						name,
@@ -148,5 +99,5 @@ export default async function uploadAll(metadata: MetadataFactory, ROOT_FOLDER: 
 	await uploadVariants(metadata, ROOT_FOLDER, options);
 	// 5 ist die Id für das Monster_1 Attribut
 	// await uploadStyles(metadata, "assets/Layer_2/_styles", 5);
-	await uploadDescription(metadata, "Monster AG");
+	await uploadDescription(metadata, "Astrobuddy is back!");
 }

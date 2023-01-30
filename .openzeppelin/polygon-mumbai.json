@@ -1,0 +1,291 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x587923AbFEc133A578aA34F8A343d58F38752655",
+    "txHash": "0x49fbbb20916d397d3d0e5b52252ef2edece573cbfef37bd639a3c791be62eac8"
+  },
+  "proxies": [
+    {
+      "address": "0xB7A1Db48847ff41ff79C12Cc633E0eC51268C5C3",
+      "txHash": "0x8c6509b4678e1462802cb7a32eb46cf2c49678b0e5b4508da91afdddf6ef07ed",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xA5aA2b5119Afd3417aFaAaE5868D26C9779A9F21",
+      "txHash": "0xf2ea42b29be0b755117fca6861710e837259982ff192d80232130777a8d8ffe9",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xaEC23dbd2754d0b60569A273a122a1E8eBe2E264",
+      "txHash": "0x8264d3d2c898a5f74b39dd180a455771e758a5b12312cbc8537fee2f62755861",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xc5bCfaEC018366CD121354523fFBD86eC7395Ff2",
+      "txHash": "0x9c8c9e176044c986bdef087a26b0d23049eff55a24468fcf21af58ae596f7251",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xa12B7B7a138aEA95D15d2422edf30FC7aE0751F2",
+      "txHash": "0xd5945134eafca9f53e41c9bb3531ad75b915a7fac693391023f0ded111dba2d2",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "1841cd0241fcf41d44cb98f91e06bae76cfac506d165d2c9f60dcac594a8f5c9": {
+      "address": "0x34051C0ed95FbDecdf126CF48a8A1Ee805Dac3d3",
+      "txHash": "0x0a5f73f48f49f135404b1f115dc6c57af60e329db80482855342637854f3f2b9",
+      "layout": {
+        "solcVersion": "0.8.17",
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint8",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:62",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol:67"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol:36"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC165Upgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\utils\\introspection\\ERC165Upgradeable.sol:41"
+          },
+          {
+            "label": "_roles",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)34_storage)",
+            "contract": "AccessControlUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:61"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "AccessControlUpgradeable",
+            "src": "@openzeppelin\\contracts-upgradeable\\access\\AccessControlUpgradeable.sol:259"
+          },
+          {
+            "label": "domainSeperator",
+            "offset": 0,
+            "slot": "151",
+            "type": "t_bytes32",
+            "contract": "EIP712Base",
+            "src": "contracts\\common\\meta-transactions\\EIP712Base.sol:23"
+          },
+          {
+            "label": "nonces",
+            "offset": 0,
+            "slot": "152",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "NativeMetaTransaction",
+            "src": "contracts\\common\\meta-transactions\\NativeMetaTransaction.sol:20"
+          },
+          {
+            "label": "_proxyRegistryAddress",
+            "offset": 0,
+            "slot": "153",
+            "type": "t_address",
+            "contract": "Astrobuddy",
+            "src": "contracts\\Astrobuddy.sol:30"
+          },
+          {
+            "label": "_contractCID",
+            "offset": 0,
+            "slot": "154",
+            "type": "t_string_storage",
+            "contract": "Astrobuddy",
+            "src": "contracts\\Astrobuddy.sol:31"
+          },
+          {
+            "label": "_itemId",
+            "offset": 0,
+            "slot": "155",
+            "type": "t_struct(Counter)909_storage",
+            "contract": "Astrobuddy",
+            "src": "contracts\\Astrobuddy.sol:32"
+          },
+          {
+            "label": "_itemInternalIds",
+            "offset": 0,
+            "slot": "156",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "Astrobuddy",
+            "src": "contracts\\Astrobuddy.sol:41"
+          },
+          {
+            "label": "_itemIdCounters",
+            "offset": 0,
+            "slot": "157",
+            "type": "t_mapping(t_uint256,t_struct(Counter)909_storage)",
+            "contract": "Astrobuddy",
+            "src": "contracts\\Astrobuddy.sol:43"
+          },
+          {
+            "label": "_itemIds",
+            "offset": 0,
+            "slot": "158",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "Astrobuddy",
+            "src": "contracts\\Astrobuddy.sol:45"
+          },
+          {
+            "label": "_itemMaxSupply",
+            "offset": 0,
+            "slot": "159",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "Astrobuddy",
+            "src": "contracts\\Astrobuddy.sol:47"
+          },
+          {
+            "label": "_itemState",
+            "offset": 0,
+            "slot": "160",
+            "type": "t_mapping(t_uint256,t_enum(ItemState)3988)",
+            "contract": "Astrobuddy",
+            "src": "contracts\\Astrobuddy.sol:49"
+          },
+          {
+            "label": "_itemLockPeriod",
+            "offset": 0,
+            "slot": "161",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "Astrobuddy",
+            "src": "contracts\\Astrobuddy.sol:51"
+          },
+          {
+            "label": "_metadataFactory",
+            "offset": 0,
+            "slot": "162",
+            "type": "t_mapping(t_uint256,t_address)",
+            "contract": "Astrobuddy",
+            "src": "contracts\\Astrobuddy.sol:53"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_enum(ItemState)3988": {
+            "label": "enum Astrobuddy.ItemState",
+            "members": [
+              "Paused",
+              "Limited",
+              "Unlimited"
+            ],
+            "numberOfBytes": "1"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)34_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_address)": {
+            "label": "mapping(uint256 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_enum(ItemState)3988)": {
+            "label": "mapping(uint256 => enum Astrobuddy.ItemState)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(Counter)909_storage)": {
+            "label": "mapping(uint256 => struct CountersUpgradeable.Counter)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(Counter)909_storage": {
+            "label": "struct CountersUpgradeable.Counter",
+            "members": [
+              {
+                "label": "_value",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(RoleData)34_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint8": {
+            "label": "uint8",
+            "numberOfBytes": "1"
+          }
+        }
+      }
+    }
+  }
+}
