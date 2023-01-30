@@ -1,5 +1,5 @@
 import randomColor from "randomcolor"
-import { mkdirSync, appendFileSync, readFileSync } from "fs"
+import { readFileSync, writeFileSync } from "fs"
 
 type NameMap = { [id: string]: string }
 
@@ -20,5 +20,5 @@ for (let k = 0; k < amount; k++) {
     const random = randomColor();
     const newLightColor = randomColor({ hue: random, luminosity: "bright" })
     const newDarkColor = randomColor({ hue: random, luminosity: "dark" })
-    appendFileSync(`${ROOT_FOLDER}/style_${k}.html`, template(newDarkColor, newLightColor))
+    writeFileSync(`${ROOT_FOLDER}/style_${k}.html`, template(newDarkColor, newLightColor))
 }

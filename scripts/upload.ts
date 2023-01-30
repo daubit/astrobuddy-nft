@@ -24,7 +24,6 @@ export async function uploadAttributes(metadata: MetadataFactory, ROOT_FOLDER: P
 		const addAttributesTx = await metadata.addAttributes(attributes);
 		await addAttributesTx.wait();
 	}
-	console.log("Added attributes folder");
 }
 
 export async function uploadDescription(metadata: MetadataFactory, description: string) {
@@ -48,7 +47,6 @@ export async function uploadStyles(
 	}
 	for (const attribute of attributes) {
 		const variants = readdirSync(`${rootFolder}/${attribute}`).slice(options?.start, options?.end);
-		console.log(variants);
 		for (const variant of variants) {
 			// console.log(`Adding attribute ${attribute}`);
 			const stylePath = `${rootFolder}/${attribute}/${variant}`;
@@ -86,7 +84,6 @@ export async function uploadStyles(
 			}
 		}
 		attributeId++;
-		console.log(`Added attribute ${attribute}`);
 	}
 }
 
