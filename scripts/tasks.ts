@@ -10,7 +10,7 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { Astrobuddy, MetadataFactory } from "../typechain-types";
 import { readdirSync, writeFileSync } from "fs";
 import { BigNumber } from "ethers";
-import { uploadAttributes, uploadStyles, uploadVariants } from "./upload";
+import { uploadAttributes, uploadVariants } from "./upload";
 import uploadAllHelper from "./upload";
 
 interface MintArgs {
