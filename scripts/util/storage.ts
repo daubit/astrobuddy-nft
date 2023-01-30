@@ -1,12 +1,12 @@
 import { assert } from "console";
-import { readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 
-export interface AddrStorage {
+export interface AddressStorage {
   [contract: string]: string;
 }
 
 export interface ChainStorage {
-  [network: number]: AddrStorage;
+  [network: number]: AddressStorage;
 }
 
 export class Storage {
@@ -17,6 +17,10 @@ export class Storage {
     assert(filePath.length > 0, "No file path given!");
     this.addresses = {};
     this.path = filePath;
+    if (!existsSync(filePath)) {
+      console.log("Creating storage!")
+      writeFileSync(this.path, JSON.stringify(this.addresses, null, 2));
+    }
   }
 
   fetch(network: number) {
@@ -24,7 +28,7 @@ export class Storage {
     return this.addresses[network] || {};
   }
 
-  save(network: number, addresses: AddrStorage) {
+  save(network: number, addresses: AddressStorage) {
     this.addresses[network] = { ...this.addresses[network], ...addresses };
     const result = JSON.stringify(this.addresses, null, 2);
     writeFileSync(this.path, result);
