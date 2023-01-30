@@ -1,5 +1,7 @@
 {
   "80001": {
-    "stringLib": "0x155eBA59ad61c68650be164fbc90b08a707b97e2"
+    "stringLib": "0x155eBA59ad61c68650be164fbc90b08a707b97e2",
+    "astro": "0x49AeFAB504EeA10Ae8088d22cD01E2eaFc8cF183",
+    "metadata": "0x933cBBEFc695C1540ABdD85B89712e9d7f06F9fb"
   }
 }
