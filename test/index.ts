@@ -151,6 +151,8 @@ describe("Astrobuddy", function () {
 		describe("TokenURI", () => {
 			it("should return the corrent token URI", async function () {
 				const tokenURI = await metadata.tokenURI(0, { gasLimit: 30_000_000 });
+				const token = JSON.parse(decodeURIComponent(tokenURI))
+				expect(token).to.not.be.undefined
 				writeFileSync("dist/token-0.txt", tokenURI, "utf-8");
 			});
 		});
