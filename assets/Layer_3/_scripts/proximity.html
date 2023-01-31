@@ -1,42 +1,60 @@
 <script type="application/javascript">
-  const sizeX = document.referrer.includes("opensea.io") ? 619 : 1000;
-  const sizeY = document.referrer.includes("opensea.io") ? 619 : 1000;
-  const rect = document.getElementsByTagName("svg")[0];
-  const offsetY = sizeY / 1000;
-  const offsetX = sizeX / 1000;
-  const DISTANCE = -22;
-  const leftEye = document.getElementById("Pupille_L");
-  const rightEye = document.getElementById("Pupille_R");
-  const lEyeRect = leftEye.getBoundingClientRect();
-  const rEyeRect = rightEye.getBoundingClientRect();
-  let lEyeX = lEyeRect.left + lEyeRect.width / 2;
-  lEyeX *= offsetX;
-  let lEyeY = lEyeRect.top + lEyeRect.height / 2;
-  lEyeY *= offsetY;
-  let rEyeX = rEyeRect.left + rEyeRect.width / 2;
-  rEyeX *= offsetX;
-  let rEyeY = rEyeRect.top + rEyeRect.height / 2;
-  rEyeY *= offsetY;
-  document.addEventListener("mousemove", function (event) {
-    let { clientX, clientY } = event;
-    // left eye
-    const dXLeft = lEyeX - clientX;
-    const dYLeft = lEyeY - clientY;
-    const unitLeft = Math.sqrt(Math.pow(dXLeft, 2) + Math.pow(dYLeft, 2));
-    const normXLeft = dXLeft / unitLeft;
-    const normYLeft = dYLeft / unitLeft;
-    // right eye
-    const dXRight = rEyeX - clientX;
-    const dYRight = rEyeY - clientY;
-    const unitRight = Math.sqrt(Math.pow(dXRight, 2) + Math.pow(dYRight, 2));
-    const normXRight = dXRight / unitRight;
-    const normYRight = dYRight / unitRight;
+  var sizeX;
+  var sizeY;
+  setup();
+  function setup() {
+    setTimeout(() => {
+      sizeX = Math.min(window.innerWidth, window.innerHeight);
+      sizeY = Math.min(window.innerWidth, window.innerHeight);
+      if (sizeX === 0 || sizeY === 0) {
+        console.log("LOAD ONE MORE TIME", sizeX, sizeY);
+        setup();
+      } else {
+        render();
+      }
+    }, 1000);
+  }
+  function render() {
+    const offsetY = sizeY / 1000;
+    const offsetX = sizeX / 1000;
+    const DISTANCE = -10;
+    const leftEye = document.getElementById("Pupille_L");
+    const rightEye = document.getElementById("Pupille_R");
+    const lEyeRect = leftEye.getBoundingClientRect();
+    const rEyeRect = rightEye.getBoundingClientRect();
+    let lEyeX = lEyeRect.left + lEyeRect.width / 2;
+    lEyeX *= offsetX;
+    let lEyeY = lEyeRect.top + lEyeRect.height / 2;
+    lEyeY *= offsetY;
+    let rEyeX = rEyeRect.left + rEyeRect.width / 2;
+    rEyeX *= offsetX;
+    let rEyeY = rEyeRect.top + rEyeRect.height / 2;
+    rEyeY *= offsetY;
+    document.addEventListener("mousemove", function (event) {
+      let { clientX, clientY } = event;
+      // left eye
+      const dXLeft = lEyeX - clientX;
+      const dYLeft = lEyeY - clientY;
+      const unitLeft = Math.sqrt(Math.pow(dXLeft, 2) + Math.pow(dYLeft, 2));
+      const normXLeft = dXLeft / unitLeft;
+      const normYLeft = dYLeft / unitLeft;
+      // right eye
+      const dXRight = rEyeX - clientX;
+      const dYRight = rEyeY - clientY;
+      const unitRight = Math.sqrt(Math.pow(dXRight, 2) + Math.pow(dYRight, 2));
+      const normXRight = dXRight / unitRight;
+      const normYRight = dYRight / unitRight;
 
-    leftEye.style = `transform: translate(${
-      normXLeft * Math.max(Math.abs(dXLeft) / DISTANCE, DISTANCE)
-    }px, ${normYLeft * Math.max(Math.abs(dYLeft) / DISTANCE, DISTANCE)}px)`;
-    rightEye.style = `transform: translate(${
-      normXRight * Math.max(Math.abs(dXRight) / DISTANCE, DISTANCE)
-    }px, ${normYRight * Math.max(Math.abs(dYRight) / DISTANCE, DISTANCE)}px)`;
-  });
+      leftEye.style = `transform: translate(${
+        normXLeft * Math.max(Math.abs(dXLeft) / DISTANCE, DISTANCE * 2)
+      }px, ${
+        normYLeft * Math.max(Math.abs(dYLeft) / DISTANCE, DISTANCE * 2)
+      }px)`;
+      rightEye.style = `transform: translate(${
+        normXRight * Math.max(Math.abs(dXRight) / DISTANCE, DISTANCE * 2)
+      }px, ${
+        normYRight * Math.max(Math.abs(dYRight) / DISTANCE, DISTANCE * 2)
+      }px)`;
+    });
+  }
 </script>
