@@ -66,7 +66,7 @@ export async function reset(args: UploadArgs, hre: HardhatRuntimeEnvironment) {
 		name: string;
 		svg: string;
 	}
-	const ROOT_FOLDER = "assets/layers";
+	const ROOT_FOLDER = "assets";
 	let layers = readdirSync(ROOT_FOLDER);
 	if (layerId > 0) {
 		const chosenLayer = layers.find((layer) => layer.includes(layerId.toString()));

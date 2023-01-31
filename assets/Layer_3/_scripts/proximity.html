@@ -4,13 +4,14 @@
   const lEyeRect = leftEye.getBoundingClientRect();
   const rEyeRect = rightEye.getBoundingClientRect();
   const lEyeX = lEyeRect.left + lEyeRect.width / 2;
-  const lEyeY = rEyeRect.top + rEyeRect.height / 2;
+  const lEyeY = lEyeRect.top + lEyeRect.height / 2;
   const rEyeX = rEyeRect.left + rEyeRect.width / 2;
   const rEyeY = rEyeRect.top + rEyeRect.height / 2;
   document
     .getElementsByTagName("svg")[0]
     .addEventListener("mousemove", function (event) {
       const { clientX, clientY } = event;
+      console.log({ clientX, clientY });
       // left eye
       const dXLeft = lEyeX - clientX;
       const dYLeft = lEyeY - clientY;
