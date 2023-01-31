@@ -11,5 +11,5 @@ for (let k = 0; k < amount; k++) {
     let result = template;
     const oldColor = template.match(/(#)([a-f]|[0-9]){6}/g)![0]
     result = result.replace(oldColor, newColor)
-    writeFileSync(`${ROOT_FOLDER}/style_${k}.html`, result)
+    writeFileSync(`${ROOT_FOLDER}/${newColor}.html`, result)
 }

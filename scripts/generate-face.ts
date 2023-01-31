@@ -19,5 +19,5 @@ for (let k = 0; k < amount; k++) {
     const random = randomColors[k];
     const newLightColor = randomColor({ hue: random, luminosity: "bright" })
     const newDarkColor = randomColor({ hue: random, luminosity: "dark" })
-    writeFileSync(`${ROOT_FOLDER}/style_${k}.html`, template(newDarkColor, newLightColor))
+    writeFileSync(`${ROOT_FOLDER}/${newDarkColor}.html`, template(newDarkColor, newLightColor))
 }
