@@ -16,6 +16,7 @@ interface Options {
 	layer: number;
 	start: number;
 	end: number;
+	startid: number;
 }
 
 export async function uploadAttributes(metadata: MetadataFactory, ROOT_FOLDER: PathLike) {
@@ -42,7 +43,7 @@ export async function uploadVariants(metadata: MetadataFactory, ROOT_FOLDER: Pat
 		const chosenLayer = layers.find((layer) => layer.includes(layerId.toString()));
 		layers = chosenLayer ? [chosenLayer] : layers;
 	}
-	let attributeId = 0;
+	let attributeId = options?.startid ?? 0;
 	for (const layer of layers) {
 		let attributeFolders = readdirSync(`${ROOT_FOLDER}/${layer}`);
 		if (layerId) {
@@ -97,7 +98,5 @@ export async function uploadVariants(metadata: MetadataFactory, ROOT_FOLDER: Pat
 export default async function uploadAll(metadata: MetadataFactory, ROOT_FOLDER: PathLike, options?: Options) {
 	await uploadAttributes(metadata, ROOT_FOLDER);
 	await uploadVariants(metadata, ROOT_FOLDER, options);
-	// 5 ist die Id für das Monster_1 Attribut
-	// await uploadStyles(metadata, "assets/Layer_2/_styles", 5);
-	await uploadDescription(metadata, "Astrobuddy is back!");
+	await uploadDescription(metadata, encodeURIComponent("Astrobuddy is back!"));
 }

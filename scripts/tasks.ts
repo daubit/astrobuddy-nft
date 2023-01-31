@@ -22,6 +22,7 @@ interface UploadArgs {
 	start: number;
 	end: number;
 	layer: number;
+	startid: number;
 }
 
 interface TokenArgs {
@@ -48,7 +49,7 @@ export async function setDescription(args: any, hre: HardhatRuntimeEnvironment) 
 		libraries: { String: stringLibAddress },
 	});
 	const metadata = Metadata.attach(metadataAddress) as MetadataFactory;
-	const setDescriptionTx = await metadata.setDescription("Astrobuddy!");
+	const setDescriptionTx = await metadata.setDescription('Astro-Buddy has now arrived on the blockchain. And for real! This NFT is procedurally generated on the Blockchain and not a boring image rotting on a cheap server. No! Our Astro-Buddy is strong and powerful... and sad when you poke him in the eye. - This Astro-Buddy NFT is part of the "FU*K YOU, CRYPTO!" book project.');
 	await setDescriptionTx.wait();
 	console.log("Set description!");
 }
@@ -60,7 +61,7 @@ export async function reset(args: UploadArgs, hre: HardhatRuntimeEnvironment) {
 	const Metadata = await hre.ethers.getContractFactory("MetadataFactory", {
 		libraries: { String: stringLibAddress },
 	});
-	const { start, end, layer: layerId } = args;
+	const { start, end, layer: layerId, startid } = args;
 	const metadata = Metadata.attach(metadataAddress) as MetadataFactory;
 	interface Variant {
 		name: string;
@@ -76,7 +77,8 @@ export async function reset(args: UploadArgs, hre: HardhatRuntimeEnvironment) {
 		const attributesFolder = readdirSync(`${ROOT_FOLDER}/${layer}`).slice(start, end);
 		for (let i = 0; i < attributesFolder.length; i++) {
 			const attribute = attributesFolder[i];
-			const attributeId = i + 1;
+			const attributeId = i + 1 + +startid;
+			console.log(`Removing attribute ${attributeId}`)
 			const variants: Variant[] = readdirSync(`${ROOT_FOLDER}/${layer}/${attribute}`).map((file) => ({
 				name: file.replace(".html", ""),
 				svg: "",
@@ -110,10 +112,10 @@ export async function upload(args: UploadArgs, hre: HardhatRuntimeEnvironment) {
 	const Metadata = await hre.ethers.getContractFactory("MetadataFactory", {
 		libraries: { String: stringLibAddress },
 	});
-	const { start, end, layer } = args;
+	const { start, end, layer, startid } = args;
 	const metadata = Metadata.attach(metadataAddress) as MetadataFactory;
 	const ROOT_FOLDER = "assets";
-	await uploadVariants(metadata, ROOT_FOLDER, { start, end, layer });
+	await uploadVariants(metadata, ROOT_FOLDER, { start, end, layer, startid });
 }
 
 
