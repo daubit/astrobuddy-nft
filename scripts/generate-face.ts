@@ -1,8 +1,8 @@
 import randomColor from "randomcolor"
-import { readFileSync, writeFileSync } from "fs"
+import { readdirSync, readFileSync, writeFileSync } from "fs"
 
 const ROOT_FOLDER = "assets/Layer_1/primary_color"
-const templateFile = readFileSync(`${ROOT_FOLDER}/default.html`, "utf8");
+const templateFile = readFileSync(`${ROOT_FOLDER}/${readdirSync(ROOT_FOLDER)[0]}`, "utf8");
 const amount = 50;
 // const gradientColors = gradients.map((gradient => gradient.match(/(#)([a-f]|[0-9]){6}/g)))
 const template = (primaryColor: string, lightColor: string) => {
@@ -19,5 +19,5 @@ for (let k = 0; k < amount; k++) {
     const random = randomColors[k];
     const newLightColor = randomColor({ hue: random, luminosity: "bright" })
     const newDarkColor = randomColor({ hue: random, luminosity: "dark" })
-    writeFileSync(`${ROOT_FOLDER}/${newDarkColor}.html`, template(newDarkColor, newLightColor))
+    writeFileSync(`${ROOT_FOLDER}/${encodeURIComponent(newDarkColor)}.html`, template(newDarkColor, newLightColor))
 }
