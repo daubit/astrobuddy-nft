@@ -1,17 +1,17 @@
 <script type="application/javascript">
+  const DISTANCE = -22;
   const leftEye = document.getElementById("Pupille_L");
   const rightEye = document.getElementById("Pupille_R");
-  const lEyeRect = leftEye.getBoundingClientRect();
-  const rEyeRect = rightEye.getBoundingClientRect();
-  const lEyeX = lEyeRect.left + lEyeRect.width / 2;
-  const lEyeY = lEyeRect.top + lEyeRect.height / 2;
-  const rEyeX = rEyeRect.left + rEyeRect.width / 2;
-  const rEyeY = rEyeRect.top + rEyeRect.height / 2;
+  const lEyeRect = leftEye.getBBox();
+  const rEyeRect = rightEye.getBBox();
+  const lEyeX = lEyeRect.x + lEyeRect.width / 2;
+  const lEyeY = lEyeRect.y + lEyeRect.height / 2;
+  const rEyeX = rEyeRect.x + rEyeRect.width / 2;
+  const rEyeY = rEyeRect.y + rEyeRect.height / 2;
   document
     .getElementsByTagName("svg")[0]
     .addEventListener("mousemove", function (event) {
       const { clientX, clientY } = event;
-      console.log({ clientX, clientY });
       // left eye
       const dXLeft = lEyeX - clientX;
       const dYLeft = lEyeY - clientY;
@@ -24,11 +24,11 @@
       const unitRight = Math.sqrt(Math.pow(dXRight, 2) + Math.pow(dYRight, 2));
       const normXRight = dXRight / unitRight;
       const normYRight = dYRight / unitRight;
-      leftEye.style = `transform: translate(${normXLeft * -20}px, ${
-        normYLeft * -20
-      }px)`;
-      rightEye.style = `transform: translate(${normXRight * -20}px, ${
-        normYRight * -20
-      }px)`;
+      leftEye.style = `transform: translate(${
+        normXLeft * Math.max(Math.abs(dXLeft) / DISTANCE, DISTANCE)
+      }px, ${normYLeft * Math.max(Math.abs(dYLeft) / DISTANCE, DISTANCE)}px)`;
+      rightEye.style = `transform: translate(${
+        normXRight * Math.max(Math.abs(dXRight) / DISTANCE, DISTANCE)
+      }px, ${normYRight * Math.max(Math.abs(dYRight) / DISTANCE, DISTANCE)}px)`;
     });
 </script>
