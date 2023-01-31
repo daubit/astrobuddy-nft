@@ -11,12 +11,6 @@ import "./common/meta-transactions/ContentMixin.sol";
 import "./common/meta-transactions/NativeMetaTransaction.sol";
 import "hardhat/console.sol";
 
-/**
- *
- * TODO:
- *       Opensea: 10%
- *
- * */
 contract Astrobuddy is
     Initializable,
     ERC721AUpgradeable,
@@ -74,7 +68,7 @@ contract Astrobuddy is
         initializer
         initializerERC721A
     {
-        __ERC721A_init("Astrobuddy", "Blyat");
+        __ERC721A_init("Astrobuddy", "Buddy");
         _contractCID = contractCID_;
         _proxyRegistryAddress = proxyRegistryAddress;
 
