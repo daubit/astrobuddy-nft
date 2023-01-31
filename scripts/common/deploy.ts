@@ -8,8 +8,14 @@ import { ethers, upgrades } from "hardhat";
 import hardhat from "hardhat";
 import { AddressStorage, Storage } from "../util/storage";
 import { verify } from "../util/utils";
-import { REGISTRY_ADDRESS, CONTRACT_METADATA_CID } from "../util/const.json";
+import { REGISTRY_ADDRESS } from "../util/const.json";
 import { Astrobuddy } from "../../typechain-types";
+import { readFileSync } from "fs";
+
+const file = readFileSync("../util/metadata.json", "utf8")
+const metadata = () => {
+	return `data:application/json,${encodeURIComponent(file)}`
+}
 
 async function main() {
 	const network = await ethers.provider.getNetwork();
@@ -29,14 +35,14 @@ async function main() {
 	if (!astroAddress) {
 		const Astrobuddy = await ethers.getContractFactory("Astrobuddy");
 		astro = (await upgrades.deployProxy(Astrobuddy, [
-			CONTRACT_METADATA_CID,
+			metadata(),
 			REGISTRY_ADDRESS,
 		])) as Astrobuddy;
 		await astro.deployed();
 		addresses.astro = astro.address;
 		console.log("Astrobuddy deployed to:", astro.address);
 		console.log("Waiting for verification...");
-		await verify(hardhat, astro.address, network.chainId, [CONTRACT_METADATA_CID, REGISTRY_ADDRESS]);
+		await verify(hardhat, astro.address, network.chainId, [metadata(), REGISTRY_ADDRESS]);
 	} else {
 		const Astrobuddy = await ethers.getContractFactory("Astrobuddy");
 		astro = Astrobuddy.attach(astroAddress) as Astrobuddy;
