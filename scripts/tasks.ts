@@ -12,6 +12,7 @@ import { readdirSync, writeFileSync } from "fs";
 import { BigNumber } from "ethers";
 import { uploadAttributes, uploadVariants } from "./upload";
 import uploadAllHelper from "./upload";
+import data from "./data.json"
 
 interface MintArgs {
 	to: string;
@@ -49,7 +50,7 @@ export async function setDescription(args: any, hre: HardhatRuntimeEnvironment) 
 		libraries: { String: stringLibAddress },
 	});
 	const metadata = Metadata.attach(metadataAddress) as MetadataFactory;
-	const setDescriptionTx = await metadata.setDescription('Astro-Buddy has now arrived on the blockchain. And for real! This NFT is procedurally generated on the Blockchain and not a boring image rotting on a cheap server. No! Our Astro-Buddy is strong and powerful... and sad when you poke him in the eye. - This Astro-Buddy NFT is part of the "FU*K YOU, CRYPTO!" book project.');
+	const setDescriptionTx = await metadata.setDescription(data.description);
 	await setDescriptionTx.wait();
 	console.log("Set description!");
 }

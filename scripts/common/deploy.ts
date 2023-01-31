@@ -12,7 +12,7 @@ import { REGISTRY_ADDRESS } from "../util/const.json";
 import { Astrobuddy } from "../../typechain-types";
 import { readFileSync } from "fs";
 
-const file = readFileSync("../util/metadata.json", "utf8")
+const file = readFileSync("./scripts/util/metadata.json", "utf8")
 const metadata = () => {
 	return `data:application/json,${encodeURIComponent(file)}`
 }

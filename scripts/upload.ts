@@ -6,6 +6,7 @@ import { encode } from "js-base64";
 import { MetadataFactory } from "../typechain-types";
 import { wrapInCData } from "./util/cdata";
 import { pad, PadType } from "./util/padding";
+import data from "./data.json"
 
 export interface Variant {
 	name: string;
@@ -98,5 +99,5 @@ export async function uploadVariants(metadata: MetadataFactory, ROOT_FOLDER: Pat
 export default async function uploadAll(metadata: MetadataFactory, ROOT_FOLDER: PathLike, options?: Options) {
 	await uploadAttributes(metadata, ROOT_FOLDER);
 	await uploadVariants(metadata, ROOT_FOLDER, options);
-	await uploadDescription(metadata, encodeURIComponent("Astrobuddy is back!"));
+	await uploadDescription(metadata, encodeURIComponent(data.description));
 }
