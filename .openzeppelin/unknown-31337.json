@@ -7,7 +7,7 @@
   "proxies": [
     {
       "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-      "txHash": "0x629a87a7642c3e1a3379738ca77a0e3313430c945b8d5996087d28fd4d50ffb5",
+      "txHash": "0x97e1cba38f28ee157274bbb2cc84a380939ac7c1873e37b033c0f0bb4521c71c",
       "kind": "transparent"
     }
   ],

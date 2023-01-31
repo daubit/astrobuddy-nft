@@ -4,10 +4,16 @@ import { Astrobuddy, MetadataFactory } from "../typechain-types";
 import CONST from "../scripts/util/const.json";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { time } from "@nomicfoundation/hardhat-network-helpers";
-import { writeFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import upload from "../scripts/upload";
 
-const { REGISTRY_ADDRESS, CONTRACT_METADATA_CID, ADMIN_ROLE } = CONST;
+const { REGISTRY_ADDRESS, ADMIN_ROLE } = CONST;
+const PREFIX = "data:application/json,"
+
+const file = readFileSync("./scripts/util/metadata.json", "utf8")
+const metadataEncoded = () => {
+	return `data:application/json,${encodeURIComponent(file)}`
+}
 
 describe("Astrobuddy", function () {
 	let astro: Astrobuddy;
@@ -22,7 +28,7 @@ describe("Astrobuddy", function () {
 		const Metadata = await ethers.getContractFactory("MetadataFactory", {
 			libraries: { String: stringLib.address },
 		});
-		astro = (await upgrades.deployProxy(Blyat, [CONTRACT_METADATA_CID, REGISTRY_ADDRESS])) as Astrobuddy;
+		astro = (await upgrades.deployProxy(Blyat, [metadataEncoded(), REGISTRY_ADDRESS])) as Astrobuddy;
 		metadata = (await Metadata.deploy()) as MetadataFactory;
 		await astro.deployed();
 
@@ -31,10 +37,15 @@ describe("Astrobuddy", function () {
 		userA = signers[1];
 	});
 	describe("Deployment", function () {
-		// it("should have contract cid", async () => {
-		// 	const cid = await astro.contractCID()
-		// 	expect(cid).equals(`ipfs://${CONTRACT_METADATA_CID}`);
-		// })
+		it("should have contract cid", async () => {
+			const metadata = await astro.contractCID()
+			const decoded = decodeURIComponent(metadata)
+			expect(decoded.startsWith(PREFIX)).to.be.true;
+			const data = JSON.parse(decoded.replace(PREFIX, ""))
+			expect(data).to.not.be.undefined
+			expect(data.name).to.not.be.undefined
+			expect(data.description).to.not.be.undefined
+		})
 		it("should have admin", async () => {
 			const hasRole = await astro.hasRole(ADMIN_ROLE, admin.address);
 			expect(hasRole).to.be.true;
@@ -150,8 +161,11 @@ describe("Astrobuddy", function () {
 		});
 		describe("TokenURI", () => {
 			it("should return the corrent token URI", async function () {
+
 				const tokenURI = await metadata.tokenURI(0, { gasLimit: 30_000_000 });
-				const token = JSON.parse(decodeURIComponent(tokenURI))
+				const decoded = decodeURIComponent(tokenURI);
+				expect(decoded.startsWith(PREFIX)).to.be.true;
+				const token = JSON.parse(decoded.replace(PREFIX, ""))
 				expect(token).to.not.be.undefined
 				writeFileSync("dist/token-0.txt", tokenURI, "utf-8");
 			});
