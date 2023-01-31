@@ -230,10 +230,7 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
 
     function _getName(uint256 internalId) internal pure returns (bytes memory) {
         return
-            abi.encodePacked(
-                "Astrobuddy-Monsterparty-",
-                Strings.toString(internalId)
-            );
+            abi.encodePacked("Astrobuddy%20%23", Strings.toString(internalId));
     }
 
     function _generateImage(
