@@ -13,3 +13,8 @@ npx hardhat run scripts/deploy.ts
 ```
 
 ``yarn deploy --network mumbai; npx hardhat uploadAll --network mumbai; npx hardhat mint --network mumbai --seasonid 1 --to 0x06F6b8f8ac59957BA693f7A6C5a00E734c5ecD53``
+
+## Assets
+
+- [ ] Profile
+- [ ] Banner
