@@ -172,3 +172,39 @@ export async function removeMinterRole(args: MinterRoleArgs, hre: HardhatRuntime
 	await tx.wait();
 	console.log(tx.hash);
 }
+interface AddItemArgs {
+	factory: string;
+	supply?: number;
+}
+export async function addItem(args: AddItemArgs, hre: HardhatRuntimeEnvironment) {
+	const network = await hre.ethers.provider.getNetwork();
+	const storage = new Storage("addresses.json");
+	const { astro: astroAddress } = storage.fetch(network.chainId);
+	const { factory, supply } = args;
+	const Astrobuddy = await hre.ethers.getContractFactory("Astrobuddy");
+	const astro = Astrobuddy.attach(astroAddress) as Astrobuddy;
+	if (supply) {
+		const addTx = await astro["addItem(address,uint256)"](factory, supply);
+		await addTx.wait();
+	} else {
+		const addTx = await astro["addItem(address)"](factory);
+		await addTx.wait();
+	}
+	console.log("Metadata added!");
+}
+interface LockArgs {
+	deadline: number;
+	seasonid: number;
+}
+
+export async function lockItem(args: LockArgs, hre: HardhatRuntimeEnvironment) {
+	const network = await hre.ethers.provider.getNetwork();
+	const storage = new Storage("addresses.json");
+	const { astro: astroAddress } = storage.fetch(network.chainId);
+	const { seasonid, deadline } = args;
+	const Astrobuddy = await hre.ethers.getContractFactory("Astrobuddy");
+	const astro = Astrobuddy.attach(astroAddress) as Astrobuddy;
+	const lockTx = await astro.setLockPeriod(seasonid, deadline);
+	await lockTx.wait();
+	console.log(`Locked item ${seasonid} till ${new Date(deadline)}`);
+}

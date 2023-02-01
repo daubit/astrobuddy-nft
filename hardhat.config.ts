@@ -15,14 +15,16 @@ import "hardhat-contract-sizer";
 import "@openzeppelin/hardhat-upgrades";
 import {
 	addAttributes,
+	addItem,
+	addMinterRole,
+	lockItem,
 	mint,
+	removeMinterRole,
 	reset,
 	setDescription,
 	tokenURI,
 	upload,
 	uploadAll,
-	addMinterRole,
-	removeMinterRole,
 } from "./scripts/tasks";
 import { benchmarkTokenURI } from "./scripts/util/test";
 
@@ -42,6 +44,8 @@ task("upload", "Upload variants", upload).addParam("start").addParam("end").addP
 task("uploadAll", "Upload variants", uploadAll);
 task("reset", "Reset metadata", reset).addParam("start").addParam("end").addParam("layer").addParam("startid");
 task("tokenURI", "Display tokenURI", tokenURI).addParam("id");
+task("addItem", addItem).addParam("factory").addOptionalParam("supply");
+task("lockItem", lockItem).addParam("seasonid").addParam("deadline");
 task("benchMark", benchmarkTokenURI).addParam("id").addParam("amount");
 task("makeMinter", addMinterRole).addParam("address");
 task("removeMinter", removeMinterRole).addParam("address");

@@ -2,19 +2,19 @@
   "manifestVersion": "3.2",
   "admin": {
     "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
-    "txHash": "0x920cca86f6c80d6744132cdd3788c622989e42695eab169842fd31850c55f16e"
+    "txHash": "0xaf31c3001801528462cd053beea0000870bcf0f47e6711663a14454c99ff1e15"
   },
   "proxies": [
     {
       "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
-      "txHash": "0x97e1cba38f28ee157274bbb2cc84a380939ac7c1873e37b033c0f0bb4521c71c",
+      "txHash": "0xfa42bb07082d79222ce0f0374b87c41e46a3de4d975d3ed71e13bdd4efc1599a",
       "kind": "transparent"
     }
   ],
   "impls": {
-    "1175bda90e4e8a13b7c5231c2ac59be0a395e2e274a8efd6d61e1c1e39b75ae1": {
+    "c4c445839532ba9aee0f30e74bacf73bd56993eae821ebfe3db5e303658d5bcf": {
       "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-      "txHash": "0x7ada4fc374eef6b6d7d6aa3add986a78d6adf53f7453ebba65ba37ec75ece53a",
+      "txHash": "0xe98f12dcbdf5c75f47fe291555907797440134a15faf2fa015e6d84b814b46d9",
       "layout": {
         "solcVersion": "0.8.17",
         "storage": [
@@ -89,7 +89,7 @@
             "slot": "153",
             "type": "t_address",
             "contract": "Astrobuddy",
-            "src": "contracts\\Astrobuddy.sol:24"
+            "src": "contracts\\Astrobuddy.sol:23"
           },
           {
             "label": "_contractCID",
@@ -97,7 +97,7 @@
             "slot": "154",
             "type": "t_string_storage",
             "contract": "Astrobuddy",
-            "src": "contracts\\Astrobuddy.sol:25"
+            "src": "contracts\\Astrobuddy.sol:24"
           },
           {
             "label": "_itemId",
@@ -105,7 +105,7 @@
             "slot": "155",
             "type": "t_struct(Counter)909_storage",
             "contract": "Astrobuddy",
-            "src": "contracts\\Astrobuddy.sol:26"
+            "src": "contracts\\Astrobuddy.sol:25"
           },
           {
             "label": "_itemInternalIds",
@@ -113,23 +113,23 @@
             "slot": "156",
             "type": "t_mapping(t_uint256,t_uint256)",
             "contract": "Astrobuddy",
-            "src": "contracts\\Astrobuddy.sol:35"
-          },
-          {
-            "label": "_itemIdCounters",
-            "offset": 0,
-            "slot": "157",
-            "type": "t_mapping(t_uint256,t_struct(Counter)909_storage)",
-            "contract": "Astrobuddy",
-            "src": "contracts\\Astrobuddy.sol:37"
+            "src": "contracts\\Astrobuddy.sol:28"
           },
           {
             "label": "_itemIds",
             "offset": 0,
-            "slot": "158",
+            "slot": "157",
             "type": "t_mapping(t_uint256,t_uint256)",
             "contract": "Astrobuddy",
-            "src": "contracts\\Astrobuddy.sol:39"
+            "src": "contracts\\Astrobuddy.sol:30"
+          },
+          {
+            "label": "_itemIdCounters",
+            "offset": 0,
+            "slot": "158",
+            "type": "t_mapping(t_uint256,t_struct(Counter)909_storage)",
+            "contract": "Astrobuddy",
+            "src": "contracts\\Astrobuddy.sol:32"
           },
           {
             "label": "_itemMaxSupply",
@@ -137,31 +137,39 @@
             "slot": "159",
             "type": "t_mapping(t_uint256,t_uint256)",
             "contract": "Astrobuddy",
-            "src": "contracts\\Astrobuddy.sol:41"
+            "src": "contracts\\Astrobuddy.sol:34"
           },
           {
-            "label": "_itemState",
+            "label": "_itemLimited",
             "offset": 0,
             "slot": "160",
-            "type": "t_mapping(t_uint256,t_enum(ItemState)3987)",
+            "type": "t_mapping(t_uint256,t_bool)",
             "contract": "Astrobuddy",
-            "src": "contracts\\Astrobuddy.sol:43"
+            "src": "contracts\\Astrobuddy.sol:36"
+          },
+          {
+            "label": "_itemPaused",
+            "offset": 0,
+            "slot": "161",
+            "type": "t_mapping(t_uint256,t_bool)",
+            "contract": "Astrobuddy",
+            "src": "contracts\\Astrobuddy.sol:38"
           },
           {
             "label": "_itemLockPeriod",
             "offset": 0,
-            "slot": "161",
+            "slot": "162",
             "type": "t_mapping(t_uint256,t_uint256)",
             "contract": "Astrobuddy",
-            "src": "contracts\\Astrobuddy.sol:45"
+            "src": "contracts\\Astrobuddy.sol:40"
           },
           {
             "label": "_metadataFactory",
             "offset": 0,
-            "slot": "162",
+            "slot": "163",
             "type": "t_mapping(t_uint256,t_address)",
             "contract": "Astrobuddy",
-            "src": "contracts\\Astrobuddy.sol:47"
+            "src": "contracts\\Astrobuddy.sol:42"
           }
         ],
         "types": {
@@ -185,15 +193,6 @@
             "label": "bytes32",
             "numberOfBytes": "32"
           },
-          "t_enum(ItemState)3987": {
-            "label": "enum Astrobuddy.ItemState",
-            "members": [
-              "Paused",
-              "Limited",
-              "Unlimited"
-            ],
-            "numberOfBytes": "1"
-          },
           "t_mapping(t_address,t_bool)": {
             "label": "mapping(address => bool)",
             "numberOfBytes": "32"
@@ -210,8 +209,8 @@
             "label": "mapping(uint256 => address)",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_uint256,t_enum(ItemState)3987)": {
-            "label": "mapping(uint256 => enum Astrobuddy.ItemState)",
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)",
             "numberOfBytes": "32"
           },
           "t_mapping(t_uint256,t_struct(Counter)909_storage)": {

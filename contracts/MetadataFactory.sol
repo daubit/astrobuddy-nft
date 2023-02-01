@@ -5,7 +5,6 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./lib/IMetadataFactory.sol";
 import "./lib/String.sol";
-import "hardhat/console.sol";
 
 contract MetadataFactory is IMetadataFactory, AccessControl {
     using String for string;
@@ -69,27 +68,6 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
         _description = description;
     }
 
-    function addVariants(
-        uint256 attributeId,
-        string[] memory variants,
-        string[] memory svgs
-    ) external {
-        if (variants.length != svgs.length) revert UnequalArrays();
-        string memory attribute = _attributes[attributeId];
-        for (uint256 i; i < variants.length; i++) {
-            string memory variant = variants[i];
-            uint256 variantId = _indexedVariant[attributeId][variant];
-            if (variantId == 0) {
-                _variantCounter[attributeId].increment();
-                variantId = _variantCounter[attributeId].current();
-                _indexedVariant[attributeId][variant] = variantId;
-                _variantName[attributeId][variantId] = variant;
-                _svg[attributeId][variantId] = svgs[i];
-                _variantKind[attributeId][variantId] = attribute;
-            }
-        }
-    }
-
     function setVariant(
         uint256 attributeId,
         string memory variant,
@@ -106,16 +84,25 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
         _svg[attributeId][variantId] = svg;
     }
 
-    function getVariantIndex(
+    function addVariants(
         uint256 attributeId,
-        string memory variant
-    ) external view returns (uint256) {
-        require(!variant.equals(""), "Empty string");
-        require(
-            attributeId > 0 && attributeId <= _attributeCounter.current(),
-            "Invalid attribute"
-        );
-        return _indexedVariant[attributeId][variant];
+        string[] memory variants,
+        string[] memory svgs
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        if (variants.length != svgs.length) revert UnequalArrays();
+        string memory attribute = _attributes[attributeId];
+        for (uint256 i; i < variants.length; i++) {
+            string memory variant = variants[i];
+            uint256 variantId = _indexedVariant[attributeId][variant];
+            if (variantId == 0) {
+                _variantCounter[attributeId].increment();
+                variantId = _variantCounter[attributeId].current();
+                _indexedVariant[attributeId][variant] = variantId;
+                _variantName[attributeId][variantId] = variant;
+                _svg[attributeId][variantId] = svgs[i];
+                _variantKind[attributeId][variantId] = attribute;
+            }
+        }
     }
 
     function addVariantChunked(
@@ -134,6 +121,18 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
         _svg[attributeId][variantId] = _svg[attributeId][variantId].concat(
             svgChunk
         );
+    }
+
+    function getVariantIndex(
+        uint256 attributeId,
+        string memory variant
+    ) external view returns (uint256) {
+        require(!variant.equals(""), "Empty string");
+        require(
+            attributeId > 0 && attributeId <= _attributeCounter.current(),
+            "Invalid attribute"
+        );
+        return _indexedVariant[attributeId][variant];
     }
 
     function addAttribute(
@@ -234,7 +233,7 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
     function _getName(uint256 internalId) internal pure returns (bytes memory) {
         return
             abi.encodePacked(
-                "Astrobuddy%20Blyatversity%20%23",
+                "Astro-Buddy%20Blyatversity%20%23",
                 Strings.toString(internalId)
             );
     }
