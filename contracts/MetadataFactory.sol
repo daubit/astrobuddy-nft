@@ -53,7 +53,7 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
                     "%22attributes%22%3A",
                     attributes,
                     "%2C",
-                    "%22animation_url%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Bbase64%2C",
+                    "%22image_data%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Bbase64%2C",
                     image,
                     "%22%7D"
                 )
@@ -230,7 +230,10 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
 
     function _getName(uint256 internalId) internal pure returns (bytes memory) {
         return
-            abi.encodePacked("Astrobuddy%20Blyatversity%20%23", Strings.toString(internalId));
+            abi.encodePacked(
+                "Astrobuddy%20Blyatversity%20%23",
+                Strings.toString(internalId)
+            );
     }
 
     function _generateImage(

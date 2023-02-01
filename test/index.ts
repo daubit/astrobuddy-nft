@@ -10,7 +10,7 @@ import upload from "../scripts/upload";
 const { REGISTRY_ADDRESS, ADMIN_ROLE } = CONST;
 const PREFIX = "data:application/json,"
 
-const file = readFileSync("./scripts/util/metadata.json", "utf8")
+const file = readFileSync("./scripts/metadata.json", "utf8")
 const metadataEncoded = () => {
 	return `data:application/json,${encodeURIComponent(file)}`
 }
