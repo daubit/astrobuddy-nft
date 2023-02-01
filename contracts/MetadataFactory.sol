@@ -5,7 +5,6 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./lib/IMetadataFactory.sol";
 import "./lib/String.sol";
-import "hardhat/console.sol";
 
 contract MetadataFactory is IMetadataFactory, AccessControl {
     using String for string;
