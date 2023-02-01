@@ -55,9 +55,6 @@ async function main() {
 		await metadata.deployed();
 		addresses.metadata = metadata.address;
 		console.log("Metadata deployed!");
-		const addTx = await astro["addItem(address)"](metadata.address);
-		await addTx.wait();
-		console.log("Metadata added!");
 		await verify(hardhat, metadata.address, network.chainId, []);
 	}
 	storage.save(network.chainId, addresses);
