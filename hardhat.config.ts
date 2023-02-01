@@ -13,7 +13,7 @@ import "hardhat-gas-reporter";
 import "solidity-coverage";
 import "hardhat-contract-sizer";
 import "@openzeppelin/hardhat-upgrades";
-import { addAttributes, mint, reset, setDescription, tokenURI, upload, uploadAll } from "./scripts/tasks";
+import { addAttributes, addItem, lockItem, mint, reset, setDescription, tokenURI, upload, uploadAll } from "./scripts/tasks";
 import { benchmarkTokenURI } from "./scripts/util/test";
 
 task("accounts", "Prints the list of accounts", async (_args, hre: HardhatRuntimeEnvironment) => {
@@ -32,6 +32,8 @@ task("upload", "Upload variants", upload).addParam("start").addParam("end").addP
 task("uploadAll", "Upload variants", uploadAll)
 task("reset", "Reset metadata", reset).addParam("start").addParam("end").addParam("layer").addParam("startid");
 task("tokenURI", "Display tokenURI", tokenURI).addParam("id");
+task("addItem", addItem).addParam("factory").addOptionalParam("supply")
+task("lockItem", lockItem).addParam("seasonid").addParam("deadline")
 task("benchMark", benchmarkTokenURI).addParam("id").addParam("amount");
 
 const MNEMONIC = process.env.MNEMONIC;

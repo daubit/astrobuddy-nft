@@ -18,3 +18,5 @@ npx hardhat run scripts/deploy.ts
 
 - [ ] Profile
 - [ ] Banner
+- [ ] Description
+- [ ] Deadline
