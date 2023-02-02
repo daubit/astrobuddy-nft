@@ -79,6 +79,7 @@ contract Astrobuddy is
     ) internal virtual override {
         // Ignore mints
         if (from == address(0)) return;
+        if (hasRole(DEFAULT_ADMIN_ROLE, msg.sender)) return;
         uint256 currentTimestamp = block.timestamp;
         uint256 itemId = _itemIds[startTokenId];
         uint256 lockPeriod = _itemLockPeriod[itemId];
