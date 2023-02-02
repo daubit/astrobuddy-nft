@@ -36,7 +36,6 @@ async function main() {
 		await astro.deployed();
 		addresses.astro = astro.address;
 		console.log("Astrobuddy deployed to:", astro.address);
-		console.log("Waiting for verification...");
 	} else {
 		const Astrobuddy = await ethers.getContractFactory("Astrobuddy");
 		astro = Astrobuddy.attach(astroAddress) as Astrobuddy;
