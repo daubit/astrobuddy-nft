@@ -8,12 +8,12 @@ import { readFileSync, writeFileSync } from "fs";
 import upload from "../scripts/upload";
 
 const { REGISTRY_ADDRESS, ADMIN_ROLE } = CONST;
-const PREFIX = "data:application/json,"
+const PREFIX = "data:application/json,";
 
-const file = readFileSync("./scripts/metadata.json", "utf8")
+const file = readFileSync("./scripts/metadata.json", "utf8");
 const metadataEncoded = () => {
-	return `data:application/json,${encodeURIComponent(file)}`
-}
+	return `data:application/json,${encodeURIComponent(file)}`;
+};
 
 describe("Astrobuddy", function () {
 	let astro: Astrobuddy;
@@ -38,14 +38,14 @@ describe("Astrobuddy", function () {
 	});
 	describe("Deployment", function () {
 		it("should have contract cid", async () => {
-			const metadata = await astro.contractCID()
-			const decoded = decodeURIComponent(metadata)
+			const metadata = await astro.contractCID();
+			const decoded = decodeURIComponent(metadata);
 			expect(decoded.startsWith(PREFIX)).to.be.true;
-			const data = JSON.parse(decoded.replace(PREFIX, ""))
-			expect(data).to.not.be.undefined
-			expect(data.name).to.not.be.undefined
-			expect(data.description).to.not.be.undefined
-		})
+			const data = JSON.parse(decoded.replace(PREFIX, ""));
+			expect(data).to.not.be.undefined;
+			expect(data.name).to.not.be.undefined;
+			expect(data.description).to.not.be.undefined;
+		});
 		it("should have admin", async () => {
 			const hasRole = await astro.hasRole(ADMIN_ROLE, admin.address);
 			expect(hasRole).to.be.true;
@@ -143,6 +143,16 @@ describe("Astrobuddy", function () {
 				const transferTx = astro.connect(userA).transferFrom(userA.address, admin.address, 0);
 				expect(transferTx).to.be.reverted;
 			});
+			it("should be able to transfer as Admin", async () => {
+				const mintTx = await astro.mint(3, admin.address);
+				await mintTx.wait();
+
+				const transferTx = await astro.connect(admin).transferFrom(admin.address, userA.address, 4);
+				await transferTx.wait();
+
+				const balance = await astro.balanceOf(userA.address);
+				expect(balance.toNumber()).to.be.equal(4);
+			});
 			it("should be able to transfer now", async () => {
 				await time.increaseTo(fiveMinPeriod);
 				const transferTx = await astro.connect(userA).transferFrom(userA.address, admin.address, 1);
@@ -161,12 +171,11 @@ describe("Astrobuddy", function () {
 		});
 		describe("TokenURI", () => {
 			it("should return the corrent token URI", async function () {
-
 				const tokenURI = await metadata.tokenURI(0, { gasLimit: 30_000_000 });
 				const decoded = decodeURIComponent(tokenURI);
 				expect(decoded.startsWith(PREFIX)).to.be.true;
-				const token = JSON.parse(decoded.replace(PREFIX, ""))
-				expect(token).to.not.be.undefined
+				const token = JSON.parse(decoded.replace(PREFIX, ""));
+				expect(token).to.not.be.undefined;
 				writeFileSync("dist/token-0.txt", tokenURI, "utf-8");
 			});
 		});
