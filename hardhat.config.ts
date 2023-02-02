@@ -13,7 +13,19 @@ import "hardhat-gas-reporter";
 import "solidity-coverage";
 import "hardhat-contract-sizer";
 import "@openzeppelin/hardhat-upgrades";
-import { addAttributes, addItem, lockItem, mint, reset, setDescription, tokenURI, upload, uploadAll } from "./scripts/tasks";
+import {
+	addAttributes,
+	addItem,
+	addMinterRole,
+	lockItem,
+	mint,
+	removeMinterRole,
+	reset,
+	setDescription,
+	tokenURI,
+	upload,
+	uploadAll,
+} from "./scripts/tasks";
 import { benchmarkTokenURI } from "./scripts/util/test";
 
 task("accounts", "Prints the list of accounts", async (_args, hre: HardhatRuntimeEnvironment) => {
@@ -28,13 +40,23 @@ task("accounts", "Prints the list of accounts", async (_args, hre: HardhatRuntim
 task("mint", "Mint Blyat Token", mint).addParam("to", "Address to mint to").addParam("seasonid");
 task("setDescription", setDescription);
 task("addAttributes", addAttributes);
-task("uploadAll", "Upload variants", uploadAll)
-task("upload", "Upload variants", upload).addOptionalParam("start").addOptionalParam("end").addOptionalParam("layer").addOptionalParam("startid");
-task("reset", "Reset metadata", reset).addOptionalParam("start").addOptionalParam("end").addOptionalParam("layer").addOptionalParam("startid");
+task("uploadAll", "Upload variants", uploadAll);
+task("upload", "Upload variants", upload)
+	.addOptionalParam("start")
+	.addOptionalParam("end")
+	.addOptionalParam("layer")
+	.addOptionalParam("startid");
+task("reset", "Reset metadata", reset)
+	.addOptionalParam("start")
+	.addOptionalParam("end")
+	.addOptionalParam("layer")
+	.addOptionalParam("startid");
 task("tokenURI", "Display tokenURI", tokenURI).addParam("id");
-task("addItem", addItem).addParam("factory").addOptionalParam("supply")
-task("lockItem", lockItem).addParam("seasonid").addParam("deadline")
+task("addItem", addItem).addParam("factory").addOptionalParam("supply");
+task("lockItem", lockItem).addParam("seasonid").addParam("deadline");
 task("benchMark", benchmarkTokenURI).addParam("id").addParam("amount");
+task("makeMinter", addMinterRole).addParam("address");
+task("removeMinter", removeMinterRole).addParam("address");
 
 const MNEMONIC = process.env.MNEMONIC;
 const ALCHEMY_KEY_MAINNET = process.env.ALCHEMY_KEY_MAINNET;

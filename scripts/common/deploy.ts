@@ -5,17 +5,15 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 import { ethers, upgrades } from "hardhat";
-import hardhat from "hardhat";
 import { AddressStorage, Storage } from "../util/storage";
-import { verify } from "../util/utils";
 import { REGISTRY_ADDRESS } from "../util/const.json";
 import { Astrobuddy } from "../../typechain-types";
 import { readFileSync } from "fs";
 
-const file = readFileSync("./scripts/metadata.json", "utf8")
+const file = readFileSync("./scripts/metadata.json", "utf8");
 const metadata = () => {
-	return `data:application/json,${encodeURIComponent(file)}`
-}
+	return `data:application/json,${encodeURIComponent(file)}`;
+};
 
 async function main() {
 	const network = await ethers.provider.getNetwork();
@@ -34,15 +32,11 @@ async function main() {
 	if (!addresses.stringLib) throw new Error("Cannot find String Library!");
 	if (!astroAddress) {
 		const Astrobuddy = await ethers.getContractFactory("Astrobuddy");
-		astro = (await upgrades.deployProxy(Astrobuddy, [
-			metadata(),
-			REGISTRY_ADDRESS,
-		])) as Astrobuddy;
+		astro = (await upgrades.deployProxy(Astrobuddy, [metadata(), REGISTRY_ADDRESS])) as Astrobuddy;
 		await astro.deployed();
 		addresses.astro = astro.address;
 		console.log("Astrobuddy deployed to:", astro.address);
 		console.log("Waiting for verification...");
-		await verify(hardhat, astro.address, network.chainId, [metadata(), REGISTRY_ADDRESS]);
 	} else {
 		const Astrobuddy = await ethers.getContractFactory("Astrobuddy");
 		astro = Astrobuddy.attach(astroAddress) as Astrobuddy;
@@ -55,7 +49,6 @@ async function main() {
 		await metadata.deployed();
 		addresses.metadata = metadata.address;
 		console.log("Metadata deployed!");
-		await verify(hardhat, metadata.address, network.chainId, []);
 	}
 	storage.save(network.chainId, addresses);
 }

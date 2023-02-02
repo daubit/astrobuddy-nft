@@ -98,9 +98,10 @@ contract Astrobuddy is
         return ContextMixin.msgSender();
     }
 
-    function setContractCID(
-        string memory contractCID_
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setContractCID(string memory contractCID_)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         _contractCID = contractCID_;
     }
 
@@ -111,10 +112,12 @@ contract Astrobuddy is
         return string(abi.encodePacked(_baseURI(), _contractCID));
     }
 
-    function mint(
-        uint256 itemId,
-        address to
-    ) external onlyValidItem(itemId) onlyRole(MINTER_ROLE) returns (uint256) {
+    function mint(uint256 itemId, address to)
+        external
+        onlyValidItem(itemId)
+        onlyRole(MINTER_ROLE)
+        returns (uint256)
+    {
         uint256 nextToken = _nextTokenId();
         _itemIds[nextToken] = itemId;
         _itemInternalIds[nextToken] = _itemIdCounters[itemId].current();
@@ -144,10 +147,10 @@ contract Astrobuddy is
      * @param factory, Metadata contract responsible for supplying a tokenURI
      * @param supply, Amount of tokens this item holds
      */
-    function addItem(
-        address factory,
-        uint256 supply
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function addItem(address factory, uint256 supply)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         if (supply == 0) revert InvalidSupply();
         _itemId.increment();
         uint256 itemId = _itemId.current();
@@ -179,9 +182,12 @@ contract Astrobuddy is
      * @dev Returns the maximum amount of token this item can mint
      * @param itemId, id of the item
      */
-    function getItemMaxSupply(
-        uint256 itemId
-    ) external view onlyValidItem(itemId) returns (uint256) {
+    function getItemMaxSupply(uint256 itemId)
+        external
+        view
+        onlyValidItem(itemId)
+        returns (uint256)
+    {
         return _itemMaxSupply[itemId];
     }
 
@@ -189,9 +195,12 @@ contract Astrobuddy is
      * @dev Returns the current amount of tokens this item holds
      * @param itemId, id of the item
      */
-    function getItemTotalSupply(
-        uint256 itemId
-    ) external view onlyValidItem(itemId) returns (uint256) {
+    function getItemTotalSupply(uint256 itemId)
+        external
+        view
+        onlyValidItem(itemId)
+        returns (uint256)
+    {
         return _itemIdCounters[itemId].current();
     }
 
@@ -199,9 +208,11 @@ contract Astrobuddy is
      * @dev Pauses the item state to stop the minting process
      * @param itemId, id of the item
      */
-    function pauseItem(
-        uint256 itemId
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) onlyValidItem(itemId) {
+    function pauseItem(uint256 itemId)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        onlyValidItem(itemId)
+    {
         _itemPaused[itemId] = true;
     }
 
@@ -209,9 +220,11 @@ contract Astrobuddy is
      * @dev Unpauses the item state to continue the minting process
      * @param itemId, id of the item
      */
-    function unpauseItem(
-        uint256 itemId
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) onlyValidItem(itemId) {
+    function unpauseItem(uint256 itemId)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        onlyValidItem(itemId)
+    {
         _itemPaused[itemId] = false;
     }
 
@@ -220,10 +233,10 @@ contract Astrobuddy is
      * @param itemId, id of the item
      * @param timePeriod, Unix timestamp of the deadline
      */
-    function setLockPeriod(
-        uint256 itemId,
-        uint256 timePeriod
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setLockPeriod(uint256 itemId, uint256 timePeriod)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         _itemLockPeriod[itemId] = timePeriod;
     }
 
@@ -231,18 +244,24 @@ contract Astrobuddy is
      * @dev Returns the internal id within an item collection
      * @param tokenId, id of the token
      */
-    function getInternalItemId(
-        uint256 tokenId
-    ) external view returns (uint256) {
+    function getInternalItemId(uint256 tokenId)
+        external
+        view
+        returns (uint256)
+    {
         return _itemInternalIds[tokenId];
     }
 
     /**
      * @dev Returns the Uniform Resource Identifier (URI) for `tokenId` token.
      */
-    function tokenURI(
-        uint256 tokenId
-    ) public view virtual override returns (string memory) {
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        virtual
+        override
+        returns (string memory)
+    {
         uint256 itemId = _itemIds[tokenId];
         IMetadataFactory metadata = IMetadataFactory(_metadataFactory[itemId]);
         return metadata.tokenURI(_itemInternalIds[tokenId]);
@@ -251,10 +270,12 @@ contract Astrobuddy is
     /**
      * @dev Override isApprovedForAll to whitelist user's OpenSea proxy accounts to enable gas-less listings.
      */
-    function isApprovedForAll(
-        address owner,
-        address operator
-    ) public view override returns (bool) {
+    function isApprovedForAll(address owner, address operator)
+        public
+        view
+        override
+        returns (bool)
+    {
         // Whitelist OpenSea proxy contract for easy trading.
         ProxyRegistry proxyRegistry = ProxyRegistry(_proxyRegistryAddress);
         if (address(proxyRegistry.proxies(owner)) == operator) {
@@ -264,9 +285,7 @@ contract Astrobuddy is
         return super.isApprovedForAll(owner, operator);
     }
 
-    function supportsInterface(
-        bytes4 interfaceId
-    )
+    function supportsInterface(bytes4 interfaceId)
         public
         view
         virtual

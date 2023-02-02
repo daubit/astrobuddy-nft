@@ -1,7 +1,7 @@
 {
-  "80001": {
-    "stringLib": "0x155eBA59ad61c68650be164fbc90b08a707b97e2",
-    "astro": "0x54B37FB882cd5a66660B6bDA0A4E65D374D9Fa62",
-    "metadata": "0x3ba86a1e87abFeacB1c398557C8d09E6Caea2A37"
-  }
+	"80001": {
+		"stringLib": "0x155eBA59ad61c68650be164fbc90b08a707b97e2",
+		"astro": "0x45c180f345D1F654A9511C4085A85BB5e4be2ADB",
+		"metadata": "0x492Ad6e448fc0d5b77390aae97c992f283Dafa24"
+	}
 }

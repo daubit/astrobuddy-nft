@@ -12,7 +12,8 @@ import { readdirSync, writeFileSync } from "fs";
 import { BigNumber } from "ethers";
 import { uploadAttributes, uploadVariants } from "./upload";
 import uploadAllHelper from "./upload";
-import data from "./data.json"
+import data from "./data.json";
+import { keccak256 } from "./util/utils";
 
 interface MintArgs {
 	to: string;
@@ -79,7 +80,7 @@ export async function reset(args: UploadArgs, hre: HardhatRuntimeEnvironment) {
 		for (let i = 0; i < attributesFolder.length; i++) {
 			const attribute = attributesFolder[i];
 			const attributeId = i + 1 + +startid;
-			console.log(`Removing attribute ${attributeId}`)
+			console.log(`Removing attribute ${attributeId}`);
 			const variants: Variant[] = readdirSync(`${ROOT_FOLDER}/${layer}/${attribute}`).map((file) => ({
 				name: file.replace(".html", ""),
 				svg: "",
@@ -119,7 +120,6 @@ export async function upload(args: UploadArgs, hre: HardhatRuntimeEnvironment) {
 	await uploadVariants(metadata, ROOT_FOLDER, { start, end, layer, startid });
 }
 
-
 export async function mint(args: MintArgs, hre: HardhatRuntimeEnvironment) {
 	const network = await hre.ethers.provider.getNetwork();
 	const storage = new Storage("addresses.json");
@@ -145,6 +145,33 @@ export async function tokenURI(args: TokenArgs, hre: HardhatRuntimeEnvironment) 
 	console.log(tx);
 }
 
+interface MinterRoleArgs {
+	address: string;
+}
+
+export async function addMinterRole(args: MinterRoleArgs, hre: HardhatRuntimeEnvironment) {
+	const network = await hre.ethers.provider.getNetwork();
+	const storage = new Storage("addresses.json");
+	const { astro: astroAddress } = storage.fetch(network.chainId);
+	const { address } = args;
+	const Metadata = await hre.ethers.getContractFactory("Astrobuddy");
+	const metadata = Metadata.attach(astroAddress) as Astrobuddy;
+	const tx = await metadata.grantRole(keccak256("MINTER_ROLE"), address);
+	await tx.wait();
+	console.log(tx.hash);
+}
+
+export async function removeMinterRole(args: MinterRoleArgs, hre: HardhatRuntimeEnvironment) {
+	const network = await hre.ethers.provider.getNetwork();
+	const storage = new Storage("addresses.json");
+	const { astro: astroAddress } = storage.fetch(network.chainId);
+	const { address } = args;
+	const Metadata = await hre.ethers.getContractFactory("Astrobuddy");
+	const metadata = Metadata.attach(astroAddress) as Astrobuddy;
+	const tx = await metadata.revokeRole(keccak256("MINTER_ROLE"), address);
+	await tx.wait();
+	console.log(tx.hash);
+}
 interface AddItemArgs {
 	factory: string;
 	supply?: number;
@@ -157,7 +184,7 @@ export async function addItem(args: AddItemArgs, hre: HardhatRuntimeEnvironment)
 	const Astrobuddy = await hre.ethers.getContractFactory("Astrobuddy");
 	const astro = Astrobuddy.attach(astroAddress) as Astrobuddy;
 	if (supply) {
-		const addTx = await astro["addItem(address,uint256)"](factory, supply)
+		const addTx = await astro["addItem(address,uint256)"](factory, supply);
 		await addTx.wait();
 	} else {
 		const addTx = await astro["addItem(address)"](factory);
@@ -179,5 +206,5 @@ export async function lockItem(args: LockArgs, hre: HardhatRuntimeEnvironment) {
 	const astro = Astrobuddy.attach(astroAddress) as Astrobuddy;
 	const lockTx = await astro.setLockPeriod(seasonid, deadline);
 	await lockTx.wait();
-	console.log(`Locked item ${seasonid} till ${new Date(deadline)}`)
+	console.log(`Locked item ${seasonid} till ${new Date(deadline)}`);
 }
