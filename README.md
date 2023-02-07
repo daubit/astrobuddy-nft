@@ -1,22 +1,12 @@
-# Sample Hardhat Project
+# Astrobuddy NFT
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+Season NFTs deren Data vollkommen On-Chain sind.
 
-Try running some of the following tasks:
+Architektur:
 
-```shell
-npx hardhat help
-npx hardhat test
-GAS_REPORT=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
+-   ERC721 Contract, baut auf ERC721 auf, speichert zu jedem Token die Season. Bei tokenURI lookup wird an einen IMetadataFactory Contract für jede Season delegiert.
+-   MetadataFactory enthält für die Atrribute der passenden SVG Grafiken und baut das NFT dann bei Bedarf zusammen.
 
-``yarn deploy --network mumbai; npx hardhat uploadAll --network mumbai; npx hardhat mint --network mumbai --seasonid 1 --to 0x06F6b8f8ac59957BA693f7A6C5a00E734c5ecD53``
+# How to use:
 
-## Assets
-
-- [ ] Profile
-- [ ] Banner
-- [ ] Description
-- [ ] Deadline
+Diese Contracts sind in einer generischeren Form hier zu finden: [https://www.npmjs.com/package/erc721-ocf](https://www.npmjs.com/package/erc721-ocf)
