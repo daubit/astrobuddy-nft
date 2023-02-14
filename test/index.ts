@@ -1,11 +1,12 @@
 import { expect } from "chai";
 import { ethers, upgrades } from "hardhat";
-import { Astrobuddy, MetadataFactory } from "../typechain-types";
+import { Astrobuddy, MetadataFactory, Random } from "../typechain-types";
 import CONST from "../scripts/util/const.json";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { time } from "@nomicfoundation/hardhat-network-helpers";
 import { readFileSync, writeFileSync } from "fs";
 import upload from "../scripts/upload";
+import { formatBytes32String, keccak256 } from "ethers/lib/utils";
 
 const { REGISTRY_ADDRESS, ADMIN_ROLE } = CONST;
 const PREFIX = "data:application/json,";
@@ -18,6 +19,7 @@ const metadataEncoded = () => {
 describe("Astrobuddy", function () {
 	let astro: Astrobuddy;
 	let metadata: MetadataFactory;
+	let random: Random;
 	let admin: SignerWithAddress;
 	let userA: SignerWithAddress;
 	before(async () => {
@@ -28,9 +30,15 @@ describe("Astrobuddy", function () {
 		const Metadata = await ethers.getContractFactory("MetadataFactory", {
 			libraries: { String: stringLib.address },
 		});
+		const Random = await ethers.getContractFactory("Random", {
+			libraries: { String: stringLib.address },
+		});
 		astro = (await upgrades.deployProxy(Blyat, [metadataEncoded(), REGISTRY_ADDRESS])) as Astrobuddy;
-		metadata = (await Metadata.deploy()) as MetadataFactory;
+		metadata = (await upgrades.deployProxy(Metadata, [], { unsafeAllowLinkedLibraries: true })) as MetadataFactory;
+		random = (await upgrades.deployProxy(Random, [], { unsafeAllowLinkedLibraries: true })) as Random;
 		await astro.deployed();
+		await metadata.deployed();
+		await random.deployed();
 
 		const signers = await ethers.getSigners();
 		admin = signers[0];
@@ -178,6 +186,34 @@ describe("Astrobuddy", function () {
 				expect(token).to.not.be.undefined;
 				writeFileSync("dist/token-0.txt", tokenURI, "utf-8");
 			});
+		});
+	});
+	describe("Random", () => {
+		it("should be random", async function () {
+			const result: { [index: number]: number } = {};
+			for (let i = 0; i < 1000; i++) {
+				const seed = keccak256(formatBytes32String(i.toString()));
+				const randIndex = (await random.randomIndex(seed, 10, 0)).toNumber();
+				if (result[randIndex]) {
+					result[randIndex]++;
+				} else {
+					result[randIndex] = 1;
+				}
+			}
+			console.log(result);
+		});
+		it("should be random 2", async function () {
+			const result: { [index: number]: number } = {};
+			const seed = keccak256(formatBytes32String("1"));
+			for (let i = 0; i < 32; i++) {
+				const randIndex = (await random.randomIndex(seed, 10, i * 8)).toNumber();
+				if (result[randIndex]) {
+					result[randIndex]++;
+				} else {
+					result[randIndex] = 1;
+				}
+			}
+			console.log(result);
 		});
 	});
 });

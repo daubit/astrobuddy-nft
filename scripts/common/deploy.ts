@@ -44,7 +44,9 @@ async function main() {
 		const Metadata = await ethers.getContractFactory("MetadataFactory", {
 			libraries: { String: addresses.stringLib },
 		});
-		const metadata = (await upgrades.deployProxy(Metadata)) as MetadataFactory;
+		const metadata = (await upgrades.deployProxy(Metadata, [], {
+			unsafeAllowLinkedLibraries: true,
+		})) as MetadataFactory;
 		await metadata.deployed();
 		addresses.metadata = metadata.address;
 		console.log("Metadata deployed!");
