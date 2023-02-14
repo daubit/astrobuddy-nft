@@ -166,7 +166,8 @@ contract MetadataFactory is IMetadataFactory, AccessControlUpgradeable {
         uint256 max,
         uint256 offset
     ) internal pure returns (uint256) {
-        uint256 info = (uint256(seed) >> offset) & 0x1111_1111;
+        // 0xFF = 0b1111_1111
+        uint256 info = (uint256(seed) >> offset) & 0xFF;
         return info % max;
     }
 
@@ -180,7 +181,7 @@ contract MetadataFactory is IMetadataFactory, AccessControlUpgradeable {
         for (uint256 i; i < currentAmount; i++) {
             uint256 attributeId = i + 1;
             uint256 variantAmount = _variantCounter[attributeId].current();
-            uint256 randomIndex = _randomIndex(seed, variantAmount, i) + 1;
+            uint256 randomIndex = _randomIndex(seed, variantAmount, i * 8) + 1;
             variants[i] = _variantName[attributeId][randomIndex];
         }
         return variants;
