@@ -1,16 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.17;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "./lib/IMetadataFactory.sol";
 import "./lib/String.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract MetadataFactory is IMetadataFactory, AccessControl {
+contract MetadataFactory is IMetadataFactory, AccessControlUpgradeable {
     using String for string;
-    using Counters for Counters.Counter;
+    using CountersUpgradeable for CountersUpgradeable.Counter;
 
-    Counters.Counter private _attributeCounter;
+    CountersUpgradeable.Counter private _attributeCounter;
 
     string private _description;
     // Id => Attribute
@@ -18,7 +19,7 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
     // AttributeId => Variant => Id
     mapping(uint256 => mapping(string => uint256)) private _indexedVariant;
     // AttributeId => Variant Amount
-    mapping(uint256 => Counters.Counter) private _variantCounter;
+    mapping(uint256 => CountersUpgradeable.Counter) private _variantCounter;
     // AttributeId => VariantId => Variant
     mapping(uint256 => mapping(uint256 => string)) private _variantName;
     // AttributeId => VariantId => Attribute
@@ -30,7 +31,8 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
     error EmptyString();
     error UnequalArrays();
 
-    constructor() {
+    function initialize() public initializer {
+        __AccessControl_init();
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
@@ -62,9 +64,10 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
             );
     }
 
-    function setDescription(
-        string memory description
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setDescription(string memory description)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         _description = description;
     }
 
@@ -123,10 +126,11 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
         );
     }
 
-    function getVariantIndex(
-        uint256 attributeId,
-        string memory variant
-    ) external view returns (uint256) {
+    function getVariantIndex(uint256 attributeId, string memory variant)
+        external
+        view
+        returns (uint256)
+    {
         require(!variant.equals(""), "Empty string");
         require(
             attributeId > 0 && attributeId <= _attributeCounter.current(),
@@ -135,16 +139,18 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
         return _indexedVariant[attributeId][variant];
     }
 
-    function addAttribute(
-        string memory attribute
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function addAttribute(string memory attribute)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         _attributeCounter.increment();
         _attributes[_attributeCounter.current()] = attribute;
     }
 
-    function addAttributes(
-        string[] memory attributes
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function addAttributes(string[] memory attributes)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         for (uint256 i; i < attributes.length; i++) {
             _attributeCounter.increment();
             _attributes[_attributeCounter.current()] = attributes[i];
@@ -164,9 +170,11 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
         return info % max;
     }
 
-    function _collectVariants(
-        bytes32 seed
-    ) internal view returns (string[] memory) {
+    function _collectVariants(bytes32 seed)
+        internal
+        view
+        returns (string[] memory)
+    {
         uint256 currentAmount = _attributeCounter.current();
         string[] memory variants = new string[](currentAmount);
         for (uint256 i; i < currentAmount; i++) {
@@ -178,9 +186,11 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
         return variants;
     }
 
-    function _generateAttributes(
-        string[] memory variants
-    ) internal view returns (bytes memory) {
+    function _generateAttributes(string[] memory variants)
+        internal
+        view
+        returns (bytes memory)
+    {
         bytes memory base;
         for (uint16 i; i < variants.length; i++) {
             uint256 attributeId = i + 1;
@@ -238,9 +248,11 @@ contract MetadataFactory is IMetadataFactory, AccessControl {
             );
     }
 
-    function _generateImage(
-        string[] memory variants
-    ) internal view returns (bytes memory) {
+    function _generateImage(string[] memory variants)
+        internal
+        view
+        returns (bytes memory)
+    {
         bytes memory base;
         uint256 amount = variants.length;
         uint256[] memory variantIds = new uint256[](amount);
