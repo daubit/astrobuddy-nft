@@ -5,8 +5,9 @@ import { encode } from "js-base64";
 // @ts-ignore
 import { MetadataFactory } from "../typechain-types";
 import { wrapInCData } from "./util/cdata";
+import { getFeeData } from "./util/utils";
 import { pad, PadType } from "./util/padding";
-import data from "./data.json"
+import data from "./data.json";
 
 export interface Variant {
 	name: string;
@@ -25,14 +26,22 @@ export async function uploadAttributes(metadata: MetadataFactory, ROOT_FOLDER: P
 	const layers = readdirSync(ROOT_FOLDER);
 	for (const layer of layers) {
 		const attributes = readdirSync(`${ROOT_FOLDER}/${layer}`);
-		const addAttributesTx = await metadata.addAttributes(attributes);
+		const feeData = await getFeeData(metadata.provider);
+		const addAttributesTx = await metadata.addAttributes(attributes, {
+			maxFeePerGas: feeData.maxFeePerGas ?? undefined,
+			maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ?? undefined,
+		});
 		await addAttributesTx.wait();
 	}
 }
 
 export async function uploadDescription(metadata: MetadataFactory, description: string) {
 	// console.log(`Setting description`);
-	const setDescriptionTx = await metadata.setDescription(description);
+	const feeData = await getFeeData(metadata.provider);
+	const setDescriptionTx = await metadata.setDescription(description, {
+		maxFeePerGas: feeData.maxFeePerGas ?? undefined,
+		maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ?? undefined,
+	});
 	await setDescriptionTx.wait();
 	console.log(`Set description`);
 }
@@ -81,15 +90,20 @@ export async function uploadVariants(metadata: MetadataFactory, ROOT_FOLDER: Pat
 				for (let start = 0; start < svg.length; start += chunkSize) {
 					const till = start + chunkSize < svg.length ? start + chunkSize : svg.length;
 					const svgChunk = pad(svg.slice(start, till), padType);
+					const feeData = await getFeeData(metadata.provider);
 					const addVariantChunkedTx = await metadata.addVariantChunked(
 						attributeId,
 						name,
-						encodeURIComponent(encode(svgChunk, false))
+						encodeURIComponent(encode(svgChunk, false)),
+						{
+							maxFeePerGas: feeData.maxFeePerGas ?? undefined,
+							maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ?? undefined,
+						}
 					);
 					await addVariantChunkedTx.wait();
 					// console.log(`Added attribute ${attributeId}, ${attributeFolders[i]} chunk ${start}`);
 				}
-				console.log(`Added variant ${name}`)
+				console.log(`Added variant ${name}`);
 			}
 			console.log(`Added attribute ${attributeFolders[i]}`);
 		}
