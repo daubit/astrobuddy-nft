@@ -170,6 +170,26 @@ describe("Astrobuddy", function () {
 			});
 		});
 	});
+	describe("Freemint", () => {
+		it("freemint should be off by default", async () => {
+			const freemintAmount = await astro.getFreemintAmount(1);
+			expect(freemintAmount.toNumber()).to.be.equal(0);
+		});
+		it("can enable freemint", async () => {
+			await astro.setFreemintAmount(1, 1);
+			const freemintAmount = await astro.getFreemintAmount(1);
+			expect(freemintAmount.toNumber()).to.be.equal(1);
+		});
+		it("can freemint", async () => {
+			await astro.connect(userA).freemint(1);
+			const balance = await astro.balanceOf(userA.address);
+			expect(balance.toNumber()).to.be.equal(4);
+		});
+		it("cannot freemint mor than allowd amount", async () => {
+			const mintTx = astro.connect(userA).freemint(1);
+			expect(mintTx).to.be.reverted;
+		});
+	});
 	describe("Metadata", () => {
 		describe("Setup", function () {
 			it("should upload data", async function () {
