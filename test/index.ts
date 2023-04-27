@@ -6,10 +6,12 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { time } from "@nomicfoundation/hardhat-network-helpers";
 import { readFileSync, writeFileSync } from "fs";
 import upload from "../scripts/upload";
-import { formatBytes32String, keccak256 } from "ethers/lib/utils";
+import { base64, formatBytes32String, keccak256 } from "ethers/lib/utils";
+import { Base64 } from "js-base64";
 
 const { REGISTRY_ADDRESS, ADMIN_ROLE } = CONST;
 const PREFIX = "data:application/json,";
+const PREFIX_IMAGE = "data:image/svg+xml;base64,";
 
 const file = readFileSync("./scripts/metadata.json", "utf8");
 const metadataEncoded = () => {
@@ -170,6 +172,26 @@ describe("Astrobuddy", function () {
 			});
 		});
 	});
+	describe("Freemint", () => {
+		it("freemint should be off by default", async () => {
+			const freemintAmount = await astro.getFreemintAmount(1);
+			expect(freemintAmount.toNumber()).to.be.equal(0);
+		});
+		it("can enable freemint", async () => {
+			await astro.setFreemintAmount(1, 1);
+			const freemintAmount = await astro.getFreemintAmount(1);
+			expect(freemintAmount.toNumber()).to.be.equal(1);
+		});
+		it("can freemint", async () => {
+			await astro.connect(userA).freemint(1);
+			const balance = await astro.balanceOf(userA.address);
+			expect(balance.toNumber()).to.be.equal(4);
+		});
+		it("cannot freemint mor than allowd amount", async () => {
+			const mintTx = astro.connect(userA).freemint(1);
+			expect(mintTx).to.be.reverted;
+		});
+	});
 	describe("Metadata", () => {
 		describe("Setup", function () {
 			it("should upload data", async function () {
@@ -184,7 +206,13 @@ describe("Astrobuddy", function () {
 				expect(decoded.startsWith(PREFIX)).to.be.true;
 				const token = JSON.parse(decoded.replace(PREFIX, ""));
 				expect(token).to.not.be.undefined;
-				writeFileSync("dist/token-0.txt", tokenURI, "utf-8");
+				const imageURI = token.image_data;
+				const decodedImage = decodeURIComponent(imageURI);
+				writeFileSync("dist/image.txt", decodedImage, "utf-8");
+				const image = Base64.fromBase64(decodedImage.replace(PREFIX_IMAGE, ""));
+				writeFileSync("dist/image.svg", image, "utf-8");
+				expect(image).to.not.be.undefined;
+				writeFileSync("dist/token.txt", tokenURI, "utf-8");
 			});
 		});
 	});
@@ -200,7 +228,7 @@ describe("Astrobuddy", function () {
 					result[randIndex] = 1;
 				}
 			}
-			console.log(result);
+			// console.log(result);
 		});
 		it("should be random 2", async function () {
 			const result: { [index: number]: number } = {};
@@ -213,7 +241,7 @@ describe("Astrobuddy", function () {
 					result[randIndex] = 1;
 				}
 			}
-			console.log(result);
+			// console.log(result);
 		});
 	});
 });
