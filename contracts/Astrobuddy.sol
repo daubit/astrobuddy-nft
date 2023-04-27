@@ -38,12 +38,12 @@ contract Astrobuddy is
     mapping(uint256 => bool) private _itemPaused;
     //ItemId => Lock Period
     mapping(uint256 => uint256) private _itemLockPeriod;
+    // ItemId => Metadata Contracts
+    mapping(uint256 => address) private _metadataFactory;
     // ItemId => Freemint amount
     mapping(uint256 => uint256) private _itemFreemintAmount;
     // ItemId => Address => freemints done
     mapping(uint256 => mapping(address => uint256)) private _userFreemintAmount;
-    // ItemId => Metadata Contracts
-    mapping(uint256 => address) private _metadataFactory;
 
     error InvalidTokenId();
     error InvalidItemId();
