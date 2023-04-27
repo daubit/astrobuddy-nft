@@ -36,7 +36,7 @@ contract MetadataFactory is IMetadataFactory, AccessControlUpgradeable {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
-    function tokenURI(uint256 tokenId) external view returns (string memory) {
+    function tokenURI(uint256 tokenId) virtual external view returns (string memory) {
         bytes32 seed = keccak256(abi.encodePacked(tokenId));
         string[] memory variants = _collectVariants(seed);
         bytes memory attributes = _generateAttributes(variants);
