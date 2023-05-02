@@ -172,6 +172,28 @@ export async function removeMinterRole(args: MinterRoleArgs, hre: HardhatRuntime
 	await tx.wait();
 	console.log(tx.hash);
 }
+
+export async function pause(args: { itemid: number }, hre: HardhatRuntimeEnvironment) {
+	const network = await hre.ethers.provider.getNetwork();
+	const storage = new Storage("addresses.json");
+	const { astro: astroAddress } = storage.fetch(network.chainId);
+	const Metadata = await hre.ethers.getContractFactory("Astrobuddy");
+	const metadata = Metadata.attach(astroAddress) as Astrobuddy;
+	const tx = await metadata.pauseItem(args.itemid);
+	await tx.wait();
+	console.log(tx.hash);
+}
+
+export async function setFreemintAmount(args: { itemid: number; amount: number }, hre: HardhatRuntimeEnvironment) {
+	const network = await hre.ethers.provider.getNetwork();
+	const storage = new Storage("addresses.json");
+	const { astro: astroAddress } = storage.fetch(network.chainId);
+	const Metadata = await hre.ethers.getContractFactory("Astrobuddy");
+	const metadata = Metadata.attach(astroAddress) as Astrobuddy;
+	const tx = await metadata.setFreemintAmount(args.itemid, args.amount);
+	await tx.wait();
+	console.log(tx.hash);
+}
 interface AddItemArgs {
 	factory: string;
 	supply?: number;

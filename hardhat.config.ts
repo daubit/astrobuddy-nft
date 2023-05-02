@@ -19,9 +19,11 @@ import {
 	addMinterRole,
 	lockItem,
 	mint,
+	pause,
 	removeMinterRole,
 	reset,
 	setDescription,
+	setFreemintAmount,
 	tokenURI,
 	upload,
 	uploadAll,
@@ -57,6 +59,8 @@ task("lockItem", lockItem).addParam("seasonid").addParam("deadline");
 task("benchMark", benchmarkTokenURI).addParam("id").addParam("amount");
 task("makeMinter", addMinterRole).addParam("address");
 task("removeMinter", removeMinterRole).addParam("address");
+task("pause", pause).addParam("itemid");
+task("setFreemintAmount", setFreemintAmount).addParam("itemid").addParam("amount");
 
 const MNEMONIC = process.env.MNEMONIC;
 const ALCHEMY_KEY_MAINNET = process.env.ALCHEMY_KEY_MAINNET;

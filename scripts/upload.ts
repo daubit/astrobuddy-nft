@@ -26,22 +26,14 @@ export async function uploadAttributes(metadata: MetadataFactory, ROOT_FOLDER: P
 	const layers = readdirSync(ROOT_FOLDER);
 	for (const layer of layers) {
 		const attributes = readdirSync(`${ROOT_FOLDER}/${layer}`);
-		const feeData = await getFeeData(metadata.provider);
-		const addAttributesTx = await metadata.addAttributes(attributes, {
-			maxFeePerGas: feeData.maxFeePerGas ?? undefined,
-			maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ?? undefined,
-		});
+		const addAttributesTx = await metadata.addAttributes(attributes);
 		await addAttributesTx.wait();
 	}
 }
 
 export async function uploadDescription(metadata: MetadataFactory, description: string) {
 	// console.log(`Setting description`);
-	const feeData = await getFeeData(metadata.provider);
-	const setDescriptionTx = await metadata.setDescription(description, {
-		maxFeePerGas: feeData.maxFeePerGas ?? undefined,
-		maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ?? undefined,
-	});
+	const setDescriptionTx = await metadata.setDescription(description);
 	await setDescriptionTx.wait();
 	console.log(`Set description`);
 }
@@ -90,14 +82,13 @@ export async function uploadVariants(metadata: MetadataFactory, ROOT_FOLDER: Pat
 				for (let start = 0; start < svg.length; start += chunkSize) {
 					const till = start + chunkSize < svg.length ? start + chunkSize : svg.length;
 					const svgChunk = pad(svg.slice(start, till), padType);
-					const feeData = await getFeeData(metadata.provider);
 					const addVariantChunkedTx = await metadata.addVariantChunked(
 						attributeId,
 						name,
 						encodeURIComponent(encode(svgChunk, false)),
 						{
-							maxFeePerGas: feeData.maxFeePerGas ?? undefined,
-							maxPriorityFeePerGas: feeData.maxPriorityFeePerGas ?? undefined,
+							maxFeePerGas: BigNumber.from(200000000000),
+							maxPriorityFeePerGas: BigNumber.from(100000000000),
 						}
 					);
 					await addVariantChunkedTx.wait();
