@@ -1,9 +1,15 @@
-// import { ethers, upgrades } from "hardhat";
+import { ethers, upgrades } from "hardhat";
+import { AddressStorage, Storage } from "../util/storage";
 
-// async function main() {
-//     const BoxV2 = await ethers.getContractFactory("BoxV2");
-//     const box = await upgrades.upgradeProxy(BOX_ADDRESS, BoxV2);
-//     console.log("Box upgraded");
-// }
+async function main() {
+	const network = await ethers.provider.getNetwork();
+	const storage = new Storage("addresses.json");
+	const addresses: AddressStorage = storage.fetch(network.chainId);
+	const { astro: astroAddress } = addresses;
+	const Astrobuddy = await ethers.getContractFactory("Astrobuddy");
+	//await upgrades.forceImport(astroAddress, Astrobuddy)
+	await upgrades.upgradeProxy(astroAddress, Astrobuddy);
+	console.log("Astrobuddy upgraded");
+}
 
-// main();
+main();
