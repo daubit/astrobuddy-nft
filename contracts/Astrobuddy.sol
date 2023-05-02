@@ -51,6 +51,7 @@ contract Astrobuddy is
     error InvalidSupply();
     error MaxSupply();
     error ItemLocked();
+    error MaxMint();
 
     modifier onlyValidItem(uint256 itemId) {
         if (itemId <= 0 && itemId > _itemId.current()) revert InvalidItemId();
@@ -142,10 +143,11 @@ contract Astrobuddy is
         uint256 itemId
     ) public onlyValidItem(itemId) returns (uint256) {
         address sender = _msgSenderERC721A();
-        require(
-            _userFreemintAmount[itemId][sender] < _itemFreemintAmount[itemId],
-            "To many free mints"
-        );
+        if (
+            _userFreemintAmount[itemId][sender] >= _itemFreemintAmount[itemId]
+        ) {
+            revert MaxMint();
+        }
         _userFreemintAmount[itemId][sender]++;
         uint256 nextToken = _nextTokenId();
         _itemIds[nextToken] = itemId;
@@ -186,6 +188,7 @@ contract Astrobuddy is
         _itemMaxSupply[itemId] = supply;
         _itemLimited[itemId] = true;
         _metadataFactory[itemId] = factory;
+        _itemFreemintAmount[itemId] = 0;
     }
 
     /**
@@ -196,6 +199,7 @@ contract Astrobuddy is
         _itemId.increment();
         uint256 itemId = _itemId.current();
         _metadataFactory[itemId] = factory;
+        _itemFreemintAmount[itemId] = 0;
     }
 
     /**

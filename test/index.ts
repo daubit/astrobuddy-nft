@@ -1,15 +1,17 @@
 import { expect } from "chai";
 import { ethers, upgrades } from "hardhat";
-import { Astrobuddy, MetadataFactory, Random } from "../typechain-types";
+import { Astrobuddy, MetadataFactory, MetadataFactoryTest, Random } from "../typechain-types";
 import CONST from "../scripts/util/const.json";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { time } from "@nomicfoundation/hardhat-network-helpers";
 import { readFileSync, writeFileSync } from "fs";
 import upload from "../scripts/upload";
 import { formatBytes32String, keccak256 } from "ethers/lib/utils";
+import { Base64 } from "js-base64";
 
 const { REGISTRY_ADDRESS, ADMIN_ROLE } = CONST;
 const PREFIX = "data:application/json,";
+const PREFIX_IMAGE = "data:image/svg+xml;base64,";
 
 const file = readFileSync("./scripts/metadata.json", "utf8");
 const metadataEncoded = () => {
@@ -19,10 +21,11 @@ const metadataEncoded = () => {
 describe("Astrobuddy", function () {
 	let astro: Astrobuddy;
 	let metadata: MetadataFactory;
+	let metadataTest: MetadataFactoryTest;
 	let random: Random;
 	let admin: SignerWithAddress;
 	let userA: SignerWithAddress;
-	before(async () => {
+	const setup = async () => {
 		const StringLib = await ethers.getContractFactory("String");
 		const stringLib = await StringLib.deploy();
 		await stringLib.deployed();
@@ -30,20 +33,28 @@ describe("Astrobuddy", function () {
 		const Metadata = await ethers.getContractFactory("MetadataFactory", {
 			libraries: { String: stringLib.address },
 		});
+		const MetadataTest = await ethers.getContractFactory("MetadataFactoryTest", {
+			libraries: { String: stringLib.address },
+		});
 		const Random = await ethers.getContractFactory("Random", {
 			libraries: { String: stringLib.address },
 		});
 		astro = (await upgrades.deployProxy(Blyat, [metadataEncoded(), REGISTRY_ADDRESS])) as Astrobuddy;
 		metadata = (await upgrades.deployProxy(Metadata, [], { unsafeAllowLinkedLibraries: true })) as MetadataFactory;
+		metadataTest = (await upgrades.deployProxy(MetadataTest, [], {
+			unsafeAllowLinkedLibraries: true,
+		})) as MetadataFactoryTest;
 		random = (await upgrades.deployProxy(Random, [], { unsafeAllowLinkedLibraries: true })) as Random;
 		await astro.deployed();
 		await metadata.deployed();
+		await metadataTest.deployed();
 		await random.deployed();
 
 		const signers = await ethers.getSigners();
 		admin = signers[0];
 		userA = signers[1];
-	});
+	};
+	before(setup);
 	describe("Deployment", function () {
 		it("should have contract cid", async () => {
 			const metadata = await astro.contractCID();
@@ -204,7 +215,13 @@ describe("Astrobuddy", function () {
 				expect(decoded.startsWith(PREFIX)).to.be.true;
 				const token = JSON.parse(decoded.replace(PREFIX, ""));
 				expect(token).to.not.be.undefined;
-				writeFileSync("dist/token-0.txt", tokenURI, "utf-8");
+				const imageURI = token.image_data;
+				const decodedImage = decodeURIComponent(imageURI);
+				writeFileSync("dist/image.txt", decodedImage, "utf-8");
+				const image = Base64.fromBase64(decodedImage.replace(PREFIX_IMAGE, ""));
+				writeFileSync("dist/image.svg", image, "utf-8");
+				expect(image).to.not.be.undefined;
+				writeFileSync("dist/token.txt", tokenURI, "utf-8");
 			});
 		});
 	});
@@ -220,7 +237,7 @@ describe("Astrobuddy", function () {
 					result[randIndex] = 1;
 				}
 			}
-			console.log(result);
+			// console.log(result);
 		});
 		it("should be random 2", async function () {
 			const result: { [index: number]: number } = {};
@@ -233,7 +250,25 @@ describe("Astrobuddy", function () {
 					result[randIndex] = 1;
 				}
 			}
-			console.log(result);
+			// console.log(result);
+		});
+	});
+	before(setup);
+	describe("Add multiple items", async () => {
+		it("should be different", async () => {
+			let addTx;
+			addTx = await astro["addItem(address)"](metadata.address);
+			await addTx.wait();
+			addTx = await astro["addItem(address)"](metadataTest.address);
+			await addTx.wait();
+			let mintTx;
+			mintTx = await astro.mint(1, userA.address);
+			await mintTx.wait();
+			mintTx = await astro.mint(2, userA.address);
+			await mintTx.wait();
+			const tokenURI1 = await metadata.tokenURI(1);
+			const tokenURI2 = await metadataTest.tokenURI(1);
+			expect(tokenURI1).to.be.not.eq(tokenURI2);
 		});
 	});
 });
