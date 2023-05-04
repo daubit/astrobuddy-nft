@@ -25,6 +25,7 @@ import {
 	setDescription,
 	setFreemintAmount,
 	tokenURI,
+	unpause,
 	upload,
 	uploadAll,
 } from "./scripts/tasks";
@@ -60,6 +61,7 @@ task("benchMark", benchmarkTokenURI).addParam("id").addParam("amount");
 task("makeMinter", addMinterRole).addParam("address");
 task("removeMinter", removeMinterRole).addParam("address");
 task("pause", pause).addParam("itemid");
+task("unpause", unpause).addParam("itemid");
 task("setFreemintAmount", setFreemintAmount).addParam("itemid").addParam("amount");
 
 const MNEMONIC = process.env.MNEMONIC;
