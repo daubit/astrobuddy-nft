@@ -17,6 +17,7 @@ import {
 	addAttributes,
 	addItem,
 	addMinterRole,
+	burnAdmin,
 	lockItem,
 	mint,
 	removeMinterRole,
@@ -36,7 +37,7 @@ task("accounts", "Prints the list of accounts", async (_args, hre: HardhatRuntim
 		console.log(await account.getBalance());
 	}
 });
-
+task("burnAdmin", "Admin burn token", burnAdmin).addParam("id", "Token to burn");
 task("mint", "Mint Blyat Token", mint).addParam("to", "Address to mint to").addParam("seasonid");
 task("setDescription", setDescription);
 task("addAttributes", addAttributes);
