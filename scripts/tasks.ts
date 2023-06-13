@@ -241,3 +241,23 @@ export async function lockItem(args: LockArgs, hre: HardhatRuntimeEnvironment) {
 	await lockTx.wait();
 	console.log(`Locked item ${seasonid} till ${new Date(deadline)}`);
 }
+
+interface BurnArgs {
+	id: number;
+}
+
+export async function burnAdmin(args: BurnArgs, hre: HardhatRuntimeEnvironment) {
+	const network = await hre.ethers.provider.getNetwork();
+	const storage = new Storage("addresses.json");
+	const { astro: astroAddress } = storage.fetch(network.chainId);
+	const { id } = args;
+	const Astrobuddy = await hre.ethers.getContractFactory("Astrobuddy");
+	const astro = Astrobuddy.attach(astroAddress) as Astrobuddy;
+	try {
+		const burnTx = await astro.burnAdmin(id);
+		await burnTx.wait();
+		console.log(`Successfully burned token ${id}`);
+	} catch (e) {
+		console.log(e);
+	}
+}
